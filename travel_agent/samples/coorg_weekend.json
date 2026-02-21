@@ -1,0 +1,281 @@
+{
+    "preferences": {
+        "raw_input": "Weekend getaway to Coorg from Bangalore. 2 days, budget ₹8,000. Love nature, coffee estates, trekking. Solo trip.",
+        "destination": "Coorg",
+        "origin": "Bangalore",
+        "duration_days": 2,
+        "total_budget_inr": 8000,
+        "travel_style": "solo_backpacking",
+        "interests": [
+            "nature",
+            "trekking",
+            "food",
+            "cultural"
+        ],
+        "group_size": 1,
+        "travel_dates": "This weekend (Sat–Sun)",
+        "constraints": [],
+        "accommodation_preference": "budget",
+        "food_preference": "both"
+    },
+    "selected_option": {
+        "label": "A",
+        "style": "Nature Immersion + Coffee Estate Experience",
+        "estimated_total_inr": 6800,
+        "highlights": [
+            "Mandalpatti Peak Trek",
+            "Abbey Falls",
+            "Coffee Estate Walk",
+            "Raja's Seat Sunset"
+        ],
+        "pros": [
+            "Perfect 2-day circuit",
+            "₹1,200 buffer for shopping"
+        ],
+        "cons": [
+            "Weather can be misty — pack layers"
+        ],
+        "recommended": true
+    },
+    "budget_breakdown": {
+        "plan_label": "A",
+        "categories": [
+            {
+                "category": "Travel (to & from)",
+                "amount_inr": 1400,
+                "description": "KSRTC AC Volvo Bangalore → Madikeri (₹700 × 2)"
+            },
+            {
+                "category": "Stay (1 night)",
+                "amount_inr": 1200,
+                "description": "Zostel Coorg or OYO budget homestay"
+            },
+            {
+                "category": "Food & Dining",
+                "amount_inr": 1500,
+                "description": "Pandi curry, Akki roti, filter coffee"
+            },
+            {
+                "category": "Activities",
+                "amount_inr": 1800,
+                "description": "Mandalpatti jeep safari, Abbey Falls, coffee estate tour"
+            },
+            {
+                "category": "Local Transport",
+                "amount_inr": 800,
+                "description": "Bike rental ₹500/day or auto"
+            },
+            {
+                "category": "Entry Fees",
+                "amount_inr": 300,
+                "description": "Abbey Falls ₹30, estate tour"
+            },
+            {
+                "category": "Miscellaneous",
+                "amount_inr": 400,
+                "description": "Coffee, souvenirs, incidentals"
+            },
+            {
+                "category": "Buffer",
+                "amount_inr": 600,
+                "description": "Emergency reserve"
+            }
+        ],
+        "projected_total_inr": 8000,
+        "remaining_buffer_inr": 0,
+        "optimization_notes": "Used KSRTC bus instead of Cab (saves ₹2,000). Chose budget homestay. Main splurge: Mandalpatti jeep safari which is the highlight of Coorg."
+    },
+    "transport_booking": {
+        "type": "bus",
+        "name": "KSRTC Airavata Gold / Club Class",
+        "description": "Bangalore Majestic → Madikeri (Coorg). Comfortable overnight or morning bus.",
+        "cost_inr": 700,
+        "duration": "5-6 hrs",
+        "location": "Bangalore → Coorg (Madikeri)",
+        "booking_url": "https://www.redbus.in/bus-tickets/bangalore-to-coorg",
+        "maps_url": null,
+        "rating": null,
+        "notes": "Book 3-4 days ahead. Departs Majestic at 8 PM (overnight) or 6 AM (day). Return: 5 PM Sunday."
+    },
+    "hotel_booking": {
+        "type": "hostel",
+        "name": "Zostel Coorg / Mountain Valley Homestay",
+        "description": "Budget homestay or hostel in Madikeri town with breakfast, wifi, and great Coorg views",
+        "cost_inr": 1200,
+        "cost_per_night_inr": 1200,
+        "location": "Madikeri, Coorg",
+        "booking_url": "https://www.zostel.com/zostel/coorg/",
+        "maps_url": "https://maps.google.com/?q=Madikeri+Coorg+Karnataka",
+        "rating": 4.3,
+        "notes": "Homestays include authentic Coorg breakfast (akki roti + pandi curry). Book early."
+    },
+    "activity_bookings": [
+        {
+            "type": "activity",
+            "name": "Mandalpatti Peak Jeep Safari",
+            "description": "Epic 4×4 jeep ride through coffee estates to 1,736m Mandalpatti peak with misty valley views",
+            "cost_inr": 800,
+            "duration": "3 hrs",
+            "location": "Mandalpatti, Coorg",
+            "booking_url": "https://www.thrillophilia.com/tours/mandalpatti-jeep-safari-coorg",
+            "maps_url": "https://maps.google.com/?q=Mandalpatti+Coorg",
+            "rating": 4.7,
+            "notes": "Shared jeep ₹800. Best in early morning for clear valley views."
+        },
+        {
+            "type": "activity",
+            "name": "Abbey Falls + Coffee Estate Walk",
+            "description": "Stunning 70ft waterfall surrounded by coffee and spice plantations. Estate walk with tasting.",
+            "cost_inr": 330,
+            "duration": "3 hrs",
+            "location": "Napoklu, Coorg",
+            "booking_url": "https://maps.google.com/?q=Abbey+Falls+Coorg",
+            "maps_url": "https://maps.google.com/?q=Abbey+Falls+Coorg",
+            "rating": 4.4,
+            "notes": "Entry ₹30 + ₹300 coffee estate tour fee. Buy fresh Coorg coffee powder here!"
+        }
+    ],
+    "days": [
+        {
+            "day_number": 1,
+            "title": "Day 1 – Arrive + Coffee Trails + Sunset",
+            "highlights": [
+                "Abbey Falls",
+                "Coffee Estate Walk",
+                "Raja's Seat Sunset"
+            ],
+            "total_cost_inr": 4200,
+            "blocks": [
+                {
+                    "time": "6:00 AM – 12:00 PM",
+                    "activity": "Travel Bangalore → Coorg",
+                    "description": "KSRTC bus from Majestic. Scenic ghats drive through Western Ghats. Arrive Madikeri.",
+                    "location": "Madikeri, Coorg",
+                    "maps_url": "https://maps.google.com/?q=Madikeri+Coorg",
+                    "cost_inr": 700,
+                    "booking_url": "https://www.redbus.in/bus-tickets/bangalore-to-coorg",
+                    "tips": "Carry motion sickness tab for ghat section. Book window seat."
+                },
+                {
+                    "time": "12:30 PM – 1:30 PM",
+                    "activity": "Check-in & Coorg Welcome Lunch",
+                    "description": "Check in to homestay. Taste authentic Coorg lunch – pandi curry (pork), rice, akki roti, tambli",
+                    "location": "Madikeri, Coorg",
+                    "maps_url": "https://maps.google.com/?q=Madikeri+Coorg",
+                    "cost_inr": 300,
+                    "booking_url": null,
+                    "tips": "Ask the homestay host for local recommendations – they're the best guides."
+                },
+                {
+                    "time": "2:30 PM – 5:30 PM",
+                    "activity": "Abbey Falls + Coffee Estate Walk",
+                    "description": "Rent a bike (₹500) and ride 8 km to Abbey Falls. Walk through a working coffee estate, see the harvest process, taste fresh-brewed Coorg coffee.",
+                    "location": "Abbey Falls, Napoklu",
+                    "maps_url": "https://maps.google.com/?q=Abbey+Falls+Coorg",
+                    "cost_inr": 1330,
+                    "booking_url": null,
+                    "tips": "Go early afternoon. Buy Coorg honey and pepper from the estate shop."
+                },
+                {
+                    "time": "6:00 PM – 7:30 PM",
+                    "activity": "Raja's Seat Sunset",
+                    "description": "Famous garden where Coorg kings watched sunsets. Panoramic view of valleys and hills turning golden.",
+                    "location": "Raja's Seat, Madikeri",
+                    "maps_url": "https://maps.google.com/?q=Raja+Seat+Madikeri+Coorg",
+                    "cost_inr": 10,
+                    "booking_url": null,
+                    "tips": "Entry ₹10. Arrive 20 mins before sunset for best light."
+                },
+                {
+                    "time": "8:00 PM – 9:00 PM",
+                    "activity": "Dinner – Coorg Cuisine",
+                    "description": "Try the famous Coorg thali at East End Restaurant – bamboo shoot curry, fish curry, payasam dessert",
+                    "location": "Madikeri town center",
+                    "maps_url": "https://maps.google.com/?q=East+End+Hotel+Madikeri+Coorg",
+                    "cost_inr": 350,
+                    "booking_url": null,
+                    "tips": "The bamboo shoot curry is Coorg's signature dish. Must try!"
+                }
+            ]
+        },
+        {
+            "day_number": 2,
+            "title": "Day 2 – Mandalpatti Trek + Return",
+            "highlights": [
+                "Mandalpatti Peak Views",
+                "Misty Valley Trek",
+                "Return to Bangalore"
+            ],
+            "total_cost_inr": 3200,
+            "blocks": [
+                {
+                    "time": "6:00 AM – 6:30 AM",
+                    "activity": "Early Breakfast",
+                    "description": "Quick homestay breakfast – idli, filter coffee, banana. Pack snacks for the trek.",
+                    "location": "Madikeri Homestay",
+                    "maps_url": null,
+                    "cost_inr": 0,
+                    "booking_url": null,
+                    "tips": "Start early for clear views before mist sets in!"
+                },
+                {
+                    "time": "7:00 AM – 10:30 AM",
+                    "activity": "Mandalpatti Jeep Safari & Trek",
+                    "description": "4×4 jeep from Bhagamandala through coffee estate trails to Mandalpatti peak. Short 30-min hike to summit viewpoint. 360° misty valley views.",
+                    "location": "Mandalpatti Peak, Coorg",
+                    "maps_url": "https://maps.google.com/?q=Mandalpatti+Coorg",
+                    "cost_inr": 800,
+                    "booking_url": "https://www.thrillophilia.com/tours/mandalpatti-jeep-safari-coorg",
+                    "tips": "Shared jeep from Bhagamandala (25 km from Madikeri). Carry a jacket — 1,736m can be cold!"
+                },
+                {
+                    "time": "11:00 AM – 12:30 PM",
+                    "activity": "Iruppu Falls (Optional) / Bhagamandala Temple",
+                    "description": "Visit the sacred Bhagamandala temple + Cauvery river origin or take a quick dip at Iruppu Falls",
+                    "location": "Bhagamandala, Coorg",
+                    "maps_url": "https://maps.google.com/?q=Bhagamandala+Temple+Coorg",
+                    "cost_inr": 100,
+                    "booking_url": null,
+                    "tips": "Remove shoes at temple. Iruppu Falls entry ₹30."
+                },
+                {
+                    "time": "1:00 PM – 2:00 PM",
+                    "activity": "Final Coorg Lunch",
+                    "description": "Local restaurant for kadambuttu (rice dumplings) or noolputtu fish curry",
+                    "location": "Madikeri",
+                    "maps_url": "https://maps.google.com/?q=Madikeri+Coorg",
+                    "cost_inr": 300,
+                    "booking_url": null,
+                    "tips": "Buy Coorg Robusta coffee beans (₹200-300 for 250gm) before leaving!"
+                },
+                {
+                    "time": "3:00 PM – 9:00 PM",
+                    "activity": "Return to Bangalore",
+                    "description": "KSRTC bus from Madikeri to Bangalore Majestic. Scenic sunset drive through the Ghats.",
+                    "location": "Bangalore",
+                    "maps_url": null,
+                    "cost_inr": 700,
+                    "booking_url": "https://www.redbus.in/bus-tickets/coorg-to-bangalore",
+                    "tips": "5 PM bus ideal. Pre-book return ticket."
+                }
+            ]
+        }
+    ],
+    "total_estimated_cost_inr": 7200,
+    "remaining_budget_inr": 800,
+    "booking_checklist": [
+        "Book KSRTC bus Bangalore → Madikeri (redbus.in or KSRTC app)",
+        "Book return bus Madikeri → Bangalore for Sunday 5 PM",
+        "Reserve homestay in Madikeri (Zostel Coorg or Airbnb)",
+        "Book Mandalpatti jeep safari online (or at Bhagamandala jeep stand)",
+        "Rent a bike in Madikeri for Abbey Falls (₹500/day without fuel)"
+    ],
+    "insider_tips": [
+        "Coorg receives heavy rainfall July–September — avoid monsoon for this trip",
+        "Mandalpatti views are clearest October–February before 9 AM",
+        "Buy authentic Coorg honey, pepper, and coffee at estate shops — not tourist traps",
+        "The bike rental in Madikeri town is best from the shops near the main market",
+        "Cell signal is poor in interior Coorg — download offline Google Maps before going"
+    ],
+    "weather_summary": "Pleasant and cool year-round. 15-22°C in hills. Light mist in mornings. Carry light jacket and raincoat (just in case)."
+}

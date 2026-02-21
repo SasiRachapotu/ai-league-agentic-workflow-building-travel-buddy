@@ -1,0 +1,387 @@
+{
+  "preferences": {
+    "raw_input": "Plan a 4-day solo backpacking trip to Rishikesh under ₹15,000. I love adventure sports and spiritual experiences. Traveling from Delhi next weekend. I prefer budget stays and local food.",
+    "destination": "Rishikesh",
+    "origin": "Delhi",
+    "duration_days": 4,
+    "total_budget_inr": 15000,
+    "travel_style": "solo_backpacking",
+    "interests": ["adventure", "spiritual", "nature"],
+    "group_size": 1,
+    "travel_dates": "Next Weekend (Fri–Mon)",
+    "constraints": ["budget stays", "local food"],
+    "accommodation_preference": "budget",
+    "food_preference": "both"
+  },
+  "selected_option": {
+    "label": "A",
+    "style": "Balanced Adventure + Spiritual",
+    "estimated_total_inr": 13200,
+    "highlights": ["White Water Rafting", "Ganga Aarti at Triveni Ghat", "Beatles Ashram"],
+    "pros": ["Best balance of activities", "Within budget with ₹1,800 buffer"],
+    "cons": ["Moderate physical effort needed"],
+    "recommended": true
+  },
+  "budget_breakdown": {
+    "plan_label": "A",
+    "categories": [
+      {"category": "Travel (to & from)", "amount_inr": 900, "description": "Delhi → Haridwar → Rishikesh by Jan Shatabdi + shared cab"},
+      {"category": "Stay (3 nights)", "amount_inr": 3600, "description": "Zostel Rishikesh – dormitory bed"},
+      {"category": "Food & Dining", "amount_inr": 2400, "description": "Local thalis, street food, cafes"},
+      {"category": "Activities", "amount_inr": 3500, "description": "Rafting, Beatles Ashram, yoga session"},
+      {"category": "Local Transport", "amount_inr": 800, "description": "Shared autos, walking"},
+      {"category": "Entry Fees", "amount_inr": 400, "description": "Beatles Ashram ₹150, Neer Garh ₹50, misc"},
+      {"category": "Miscellaneous", "amount_inr": 600, "description": "SIM card, tips, incidentals"},
+      {"category": "Buffer", "amount_inr": 1200, "description": "Emergency reserve"}
+    ],
+    "projected_total_inr": 13400,
+    "remaining_buffer_inr": 1600,
+    "optimization_notes": "Chose dormitory stay over private rooms to save ₹1,200. Using shared cabs instead of private taxis saves ₹400. Main splurge is the 16km rafting stretch which is worth every rupee."
+  },
+  "transport_booking": {
+    "type": "train",
+    "name": "Jan Shatabdi Express (12055)",
+    "description": "Delhi → Haridwar, then shared cab Haridwar → Rishikesh (1 hr, ₹150)",
+    "cost_inr": 550,
+    "duration": "6-7 hrs total",
+    "location": "Delhi → Rishikesh",
+    "booking_url": "https://www.irctc.co.in/",
+    "maps_url": null,
+    "rating": null,
+    "notes": "Book 2 weeks ahead; Haridwar station to Rishikesh by shared auto or cab"
+  },
+  "hotel_booking": {
+    "type": "hostel",
+    "name": "Zostel Rishikesh",
+    "description": "India's most loved backpacker hostel in Tapovan area with river views, rooftop cafe, and curated community events",
+    "cost_inr": 1200,
+    "cost_per_night_inr": 1200,
+    "location": "Tapovan, Rishikesh",
+    "booking_url": "https://www.zostel.com/zostel/rishikesh/",
+    "maps_url": "https://maps.google.com/?q=Zostel+Rishikesh+Tapovan",
+    "rating": 4.4,
+    "notes": "Book 1 week in advance; dorm beds & private rooms; great for solo travelers"
+  },
+  "activity_bookings": [
+    {
+      "type": "activity",
+      "name": "White Water Rafting (16 km)",
+      "description": "Shivpuri to Rishikesh stretch through Grade 3-4 rapids – most popular rafting experience",
+      "cost_inr": 1500,
+      "cost_per_night_inr": null,
+      "duration": "3-4 hrs",
+      "location": "Shivpuri, Rishikesh",
+      "booking_url": "https://www.thrillophilia.com/tours/rishikesh-river-rafting",
+      "maps_url": "https://maps.google.com/?q=Shivpuri+Rishikesh",
+      "rating": 4.6,
+      "notes": "Helmet and life jacket provided; best done morning or early afternoon"
+    },
+    {
+      "type": "activity",
+      "name": "Ganga Aarti at Triveni Ghat",
+      "description": "Mesmerizing fire ceremony on the banks of the Ganges at sunset – a deeply spiritual experience",
+      "cost_inr": 0,
+      "duration": "1.5 hrs",
+      "location": "Triveni Ghat, Rishikesh",
+      "booking_url": "https://maps.google.com/?q=Triveni+Ghat+Rishikesh",
+      "maps_url": "https://maps.google.com/?q=Triveni+Ghat+Rishikesh",
+      "rating": 4.8,
+      "notes": "Arrive 30 mins early for front row spot; starts at 6 PM in winter, 7 PM in summer"
+    },
+    {
+      "type": "activity",
+      "name": "Beatles Ashram (Chaurasi Kutia)",
+      "description": "Iconic ashram where The Beatles studied TM meditation in 1968 – now an open-air art gallery",
+      "cost_inr": 150,
+      "duration": "2 hrs",
+      "location": "Swarg Ashram, Rishikesh",
+      "booking_url": "https://maps.google.com/?q=Beatles+Ashram+Rishikesh",
+      "maps_url": "https://maps.google.com/?q=Beatles+Ashram+Rishikesh",
+      "rating": 4.5,
+      "notes": "Photography allowed; wear comfortable shoes; open 9 AM – 5 PM"
+    },
+    {
+      "type": "activity",
+      "name": "Neer Garh Waterfall Trek",
+      "description": "Short 2.5 km trek through forest to a pristine waterfall – great for nature lovers",
+      "cost_inr": 50,
+      "duration": "2.5 hrs",
+      "location": "Neer Garh, Rishikesh",
+      "booking_url": "https://maps.google.com/?q=Neer+Garh+Waterfall+Rishikesh",
+      "maps_url": "https://maps.google.com/?q=Neer+Garh+Waterfall+Rishikesh",
+      "rating": 4.3,
+      "notes": "Best visited morning before 11 AM; carry water and snacks"
+    }
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Day 1 – Travel + Spiritual Evening",
+      "highlights": ["Journey to Rishikesh", "Iconic Ganga Aarti at sunset"],
+      "total_cost_inr": 1300,
+      "blocks": [
+        {
+          "time": "6:00 AM – 7:00 AM",
+          "activity": "Depart Delhi",
+          "description": "Board Jan Shatabdi Express from New Delhi / Haridwar Junction. Grab breakfast at station.",
+          "location": "New Delhi Railway Station",
+          "maps_url": "https://maps.google.com/?q=New+Delhi+Railway+Station",
+          "cost_inr": 550,
+          "booking_url": "https://www.irctc.co.in/",
+          "tips": "Book 2F or window seat for scenic Himalayan foothills views"
+        },
+        {
+          "time": "12:30 PM – 1:30 PM",
+          "activity": "Arrive Haridwar → Rishikesh",
+          "description": "Arrive Haridwar, take shared cab or Vikram to Rishikesh (45–60 min). Lunch on the way.",
+          "location": "Haridwar to Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Haridwar+to+Rishikesh",
+          "cost_inr": 150,
+          "booking_url": null,
+          "tips": "Shared Vikrams leave from outside Haridwar station. Negotiate ₹100-150."
+        },
+        {
+          "time": "2:00 PM – 3:00 PM",
+          "activity": "Check-in at Zostel Rishikesh",
+          "description": "Check in, freshen up, meet fellow travelers at the common area. Drop your bag.",
+          "location": "Tapovan, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Zostel+Rishikesh+Tapovan",
+          "cost_inr": 0,
+          "booking_url": "https://www.zostel.com/zostel/rishikesh/",
+          "tips": "Say hi to the hostel staff for local tips and free itinerary advice"
+        },
+        {
+          "time": "5:00 PM – 7:30 PM",
+          "activity": "Ganga Aarti at Triveni Ghat",
+          "description": "Walk to Triveni Ghat for the mesmerizing sunset fire Aarti. Hundreds of oil lamps float on the Ganges.",
+          "location": "Triveni Ghat, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Triveni+Ghat+Rishikesh",
+          "cost_inr": 0,
+          "booking_url": null,
+          "tips": "Arrive by 5:30 PM for a good spot. Remove shoes. Incredibly peaceful experience."
+        },
+        {
+          "time": "8:00 PM – 9:00 PM",
+          "activity": "Dinner – Chotiwala Restaurant",
+          "description": "Famous local restaurant near Triveni Ghat known for North Indian thalis and dal makhani.",
+          "location": "Ram Jhula, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Chotiwala+Restaurant+Rishikesh",
+          "cost_inr": 250,
+          "booking_url": null,
+          "tips": "Try the Special Thali for ₹180-220. Also try the lassi!"
+        }
+      ]
+    },
+    {
+      "day_number": 2,
+      "title": "Day 2 – Adventure Day",
+      "highlights": ["16 km White Water Rafting", "Cliff jumping at Jumpin Heights"],
+      "total_cost_inr": 2500,
+      "blocks": [
+        {
+          "time": "7:00 AM – 8:00 AM",
+          "activity": "Breakfast at Zostel Cafe",
+          "description": "Fuel up with a hearty breakfast. Scrambled eggs, toast, chai. Pack a snack for the river.",
+          "location": "Zostel Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Zostel+Rishikesh+Tapovan",
+          "cost_inr": 200,
+          "booking_url": null,
+          "tips": "Wear clothes you don't mind getting wet. Waterproof your valuables."
+        },
+        {
+          "time": "9:00 AM – 1:00 PM",
+          "activity": "White Water Rafting – Shivpuri to Rishikesh",
+          "description": "16 km exhilarating rafting through Grade 3-4 rapids: Golf Course, Three Blind Mice, Body Surfing! Equipment & guide included.",
+          "location": "Shivpuri Start Point, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Shivpuri+Rishikesh",
+          "cost_inr": 1500,
+          "booking_url": "https://www.thrillophilia.com/tours/rishikesh-river-rafting",
+          "tips": "Book the night before or early morning. Waterproof pouches for phone (₹50 rental). Listen to your guide!"
+        },
+        {
+          "time": "1:30 PM – 2:30 PM",
+          "activity": "Lunch at Riverside Cafe",
+          "description": "Post-rafting lunch at one of the cafes near Ram Jhula. Great views, hearty meals.",
+          "location": "Ram Jhula, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Ram+Jhula+Rishikesh",
+          "cost_inr": 250,
+          "booking_url": null,
+          "tips": "Try the maggi noodles + chai combo – ultra satisfying post-adventure!"
+        },
+        {
+          "time": "3:00 PM – 5:00 PM",
+          "activity": "Cliff Jumping & Swimming (Optional)",
+          "description": "Several spots near Lakshman Jhula offer natural cliff jumping into the Ganga. Thrilling!",
+          "location": "Lakshman Jhula area, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Lakshman+Jhula+Rishikesh",
+          "cost_inr": 400,
+          "booking_url": null,
+          "tips": "Only jump at designated spots with locals present. River can be strong."
+        },
+        {
+          "time": "6:00 PM – 7:30 PM",
+          "activity": "Evening Walk – Lakshman Jhula",
+          "description": "Stroll across the iconic suspension bridge, browse local bead & gem shops, watch the sunset.",
+          "location": "Lakshman Jhula, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Lakshman+Jhula+Rishikesh",
+          "cost_inr": 0,
+          "booking_url": null,
+          "tips": "Great photo ops at golden hour. Try the banana lassi from street stalls."
+        },
+        {
+          "time": "8:00 PM – 9:00 PM",
+          "activity": "Dinner – Little Buddha Cafe",
+          "description": "Rooftop cafe with Ganga views, great for pasta, momos, and local curries.",
+          "location": "Lakshman Jhula, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Little+Buddha+Cafe+Rishikesh",
+          "cost_inr": 300,
+          "booking_url": null,
+          "tips": "Arrive before sunset for the best view table"
+        }
+      ]
+    },
+    {
+      "day_number": 3,
+      "title": "Day 3 – Trek + Culture",
+      "highlights": ["Neer Garh Waterfall Trek", "Beatles Ashram", "Evening Yoga"],
+      "total_cost_inr": 1800,
+      "blocks": [
+        {
+          "time": "7:00 AM – 7:30 AM",
+          "activity": "Breakfast",
+          "description": "Quick breakfast at hostel – banana pancakes and coffee",
+          "location": "Zostel Rishikesh",
+          "maps_url": null,
+          "cost_inr": 150,
+          "booking_url": null,
+          "tips": "Start early to beat the heat on the trek"
+        },
+        {
+          "time": "8:00 AM – 10:30 AM",
+          "activity": "Neer Garh Waterfall Trek",
+          "description": "2.5 km forest trail leads to a stunning multi-tiered waterfall. Refreshing dip at the base!",
+          "location": "Neer Garh, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Neer+Garh+Waterfall+Rishikesh",
+          "cost_inr": 50,
+          "booking_url": null,
+          "tips": "Wear sports shoes. Carry water bottle. The upper falls are less crowded."
+        },
+        {
+          "time": "11:30 AM – 1:30 PM",
+          "activity": "Beatles Ashram (Chaurasi Kutia)",
+          "description": "Explore the abandoned ashram where John Lennon, Paul McCartney, Ringo Starr & George Harrison came in 1968. Beautiful murals throughout.",
+          "location": "Swarg Ashram, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Beatles+Ashram+Rishikesh",
+          "cost_inr": 150,
+          "booking_url": null,
+          "tips": "Entry ₹150 for Indians. Spend time reading the history boards. Meditation dome is magical."
+        },
+        {
+          "time": "2:00 PM – 3:00 PM",
+          "activity": "Lunch at Ganga Beach Cafe",
+          "description": "Beachside seating by the Ganga, cold drinks, light meals",
+          "location": "Swarg Ashram Beach, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Swarg+Ashram+Beach+Rishikesh",
+          "cost_inr": 250,
+          "booking_url": null,
+          "tips": null
+        },
+        {
+          "time": "4:00 PM – 6:00 PM",
+          "activity": "Evening Yoga at Parmarth Niketan",
+          "description": "Drop-in yoga class at one of the most famous ashrams on the Ganga bank. Transformative experience.",
+          "location": "Parmarth Niketan Ashram, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Parmarth+Niketan+Rishikesh",
+          "cost_inr": 300,
+          "booking_url": null,
+          "tips": "Wear comfortable clothes. Drop-in classes available. Check timings at the gate."
+        },
+        {
+          "time": "7:30 PM – 9:00 PM",
+          "activity": "Dinner & Stargazing",
+          "description": "Dinner at Cafe Nirvana with rooftop stargazing over the Himalayas",
+          "location": "Tapovan, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Cafe+Nirvana+Rishikesh",
+          "cost_inr": 280,
+          "booking_url": null,
+          "tips": "The pumpkin soup is famous here. Great spot for meeting fellow travelers."
+        }
+      ]
+    },
+    {
+      "day_number": 4,
+      "title": "Day 4 – Sunrise + Return",
+      "highlights": ["Kunjapuri Temple Sunrise", "Return journey to Delhi"],
+      "total_cost_inr": 1500,
+      "blocks": [
+        {
+          "time": "4:30 AM – 4:45 AM",
+          "activity": "Pre-dawn Wake-up",
+          "description": "Wake up early and meet your shared taxi at the hostel gate.",
+          "location": "Zostel Rishikesh",
+          "maps_url": null,
+          "cost_inr": 0,
+          "booking_url": null,
+          "tips": "Book the taxi the night before. ₹600 for a shared jeep (4-5 people)"
+        },
+        {
+          "time": "5:00 AM – 7:30 AM",
+          "activity": "Kunjapuri Temple Sunrise",
+          "description": "25 km drive up to the Kunjapuri Devi Temple at 1,676m elevation. Breathtaking 360° Himalayan sunrise view – Gangotri, Kedarnath peaks visible.",
+          "location": "Kunjapuri Devi Temple, Rishikesh",
+          "maps_url": "https://maps.google.com/?q=Kunjapuri+Temple+Rishikesh",
+          "cost_inr": 600,
+          "booking_url": null,
+          "tips": "Carry a warm jacket! It's cold at 5 AM. Worth every rupee."
+        },
+        {
+          "time": "8:30 AM – 9:30 AM",
+          "activity": "Farewell Breakfast + Check-out",
+          "description": "Last breakfast in Rishikesh. Check out of Zostel and store bags if needed.",
+          "location": "Tapovan, Rishikesh",
+          "maps_url": null,
+          "cost_inr": 200,
+          "booking_url": null,
+          "tips": "Buy some local honey or Rudraksha souvenirs from the market"
+        },
+        {
+          "time": "10:00 AM – 11:00 AM",
+          "activity": "Rishikesh → Haridwar",
+          "description": "Shared cab from Rishikesh to Haridwar station for your return train.",
+          "location": "Haridwar Railway Station",
+          "maps_url": "https://maps.google.com/?q=Haridwar+Junction+Railway+Station",
+          "cost_inr": 150,
+          "booking_url": null,
+          "tips": "Leave by 10 AM for a 12 PM train from Haridwar"
+        },
+        {
+          "time": "12:00 PM – 6:00 PM",
+          "activity": "Return to Delhi",
+          "description": "Jan Shatabdi back to Delhi. Great time to journal your trip memories!",
+          "location": "Haridwar → New Delhi",
+          "maps_url": "https://maps.google.com/?q=New+Delhi+Railway+Station",
+          "cost_inr": 550,
+          "booking_url": "https://www.irctc.co.in/",
+          "tips": "Book return ticket in advance. Carry snacks for the journey."
+        }
+      ]
+    }
+  ],
+  "total_estimated_cost_inr": 12500,
+  "remaining_budget_inr": 2500,
+  "booking_checklist": [
+    "Book Delhi → Haridwar train on IRCTC (Jan Shatabdi or Mussoorie Express)",
+    "Confirm Zostel Rishikesh dorm bed (zostel.com)",
+    "Reserve rafting slot via Thrillophilia a day in advance",
+    "Arrange Kunjapuri sunrise taxi through hostel (night before)",
+    "Book return Haridwar → Delhi train ticket"
+  ],
+  "insider_tips": [
+    "Tapovan area is quieter than Ram Jhula – better for budget stays and great cafes",
+    "Bargain with local auto-rickshaws; always agree on price before boarding",
+    "Rishikesh is alcohol-free – respect local customs",
+    "ATMs near Ram Jhula but carry cash for small vendors",
+    "Best month to visit: March-May and September-November. Monsoon brings flood risk."
+  ],
+  "weather_summary": "Pleasant and cool in Feb–March. Expect 12-22°C. Carry light layers and a windbreaker for evenings."
+}

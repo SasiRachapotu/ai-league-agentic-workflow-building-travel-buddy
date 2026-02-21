@@ -1,0 +1,418 @@
+{
+    "preferences": {
+        "raw_input": "Plan a 5-day family vacation to Goa with two kids. Budget ₹60,000. We want beaches, water sports, seafood, and comfortable hotels. Flying from Mumbai.",
+        "destination": "Goa",
+        "origin": "Mumbai",
+        "duration_days": 5,
+        "total_budget_inr": 60000,
+        "travel_style": "family",
+        "interests": [
+            "beaches",
+            "water sports",
+            "food",
+            "nature"
+        ],
+        "group_size": 4,
+        "travel_dates": "March 10–14",
+        "constraints": [
+            "kid-friendly",
+            "comfortable stay"
+        ],
+        "accommodation_preference": "mid-range",
+        "food_preference": "non-veg"
+    },
+    "selected_option": {
+        "label": "A",
+        "style": "Beach + Water Sports + Family Comfort",
+        "estimated_total_inr": 54000,
+        "highlights": [
+            "North Goa beaches",
+            "Dolphin boat trip",
+            "Water sports at Calangute",
+            "Old Goa churches"
+        ],
+        "pros": [
+            "Kid-friendly activities",
+            "Excellent beach coverage",
+            "₹6,000 buffer for shopping"
+        ],
+        "cons": [
+            "March can be warm, sun protection needed"
+        ],
+        "recommended": true
+    },
+    "budget_breakdown": {
+        "plan_label": "A",
+        "categories": [
+            {
+                "category": "Travel (to & from)",
+                "amount_inr": 14000,
+                "description": "SpiceJet/IndiGo flights Mumbai-Goa-Mumbai (4 tickets)"
+            },
+            {
+                "category": "Stay (4 nights)",
+                "amount_inr": 20000,
+                "description": "Mid-range beachside resort/hotel – 2 rooms or family suite"
+            },
+            {
+                "category": "Food & Dining",
+                "amount_inr": 10000,
+                "description": "Seafood restaurants, beach shacks, family meals"
+            },
+            {
+                "category": "Activities",
+                "amount_inr": 8000,
+                "description": "Water sports, dolphin trip, sightseeing"
+            },
+            {
+                "category": "Local Transport",
+                "amount_inr": 3500,
+                "description": "Taxi + scooter rental for couple days"
+            },
+            {
+                "category": "Entry Fees",
+                "amount_inr": 1000,
+                "description": "Churches, forts, waterpark"
+            },
+            {
+                "category": "Miscellaneous",
+                "amount_inr": 1500,
+                "description": "Shopping, souvenirs, incidentals"
+            },
+            {
+                "category": "Buffer",
+                "amount_inr": 2000,
+                "description": "Emergency reserve"
+            }
+        ],
+        "projected_total_inr": 60000,
+        "remaining_buffer_inr": 0,
+        "optimization_notes": "Booked mid-week flights to save ₹3,000 vs weekend. Chose Airbnb-style family suite over 2 separate hotel rooms to save ₹2,500. Prioritized water sports budget as kids will love it."
+    },
+    "transport_booking": {
+        "type": "flight",
+        "name": "IndiGo 6E-101 / SpiceJet SG-119",
+        "description": "Mumbai (BOM) → Goa Dabolim (GOI). Direct flight, 1hr 10min.",
+        "cost_inr": 3500,
+        "duration": "1 hr 10 min",
+        "location": "Mumbai → Goa",
+        "booking_url": "https://www.makemytrip.com/flights/",
+        "maps_url": null,
+        "rating": null,
+        "notes": "Book 3-4 weeks ahead for best fares. ₹3,500 per ticket × 4 = ₹14,000"
+    },
+    "hotel_booking": {
+        "type": "hotel",
+        "name": "The Marbela Beach Resort",
+        "description": "4-star beachfront resort in Morjim with pool, kids play area, seafood restaurant, and beach access",
+        "cost_inr": 4500,
+        "cost_per_night_inr": 4500,
+        "location": "Calangute Beach, North Goa",
+        "booking_url": "https://www.goibibo.com/hotels/goa/",
+        "maps_url": "https://maps.google.com/?q=Calangute+Beach+Hotels+Goa",
+        "rating": 4.2,
+        "notes": "Family rooms available with extra bed. Pool facing rooms preferred."
+    },
+    "activity_bookings": [
+        {
+            "type": "activity",
+            "name": "Water Sports Package – Calangute Beach",
+            "description": "Jet skiing, banana boat, parasailing, and bumper ride package for the whole family",
+            "cost_inr": 3000,
+            "duration": "3 hrs",
+            "location": "Calangute Beach, Goa",
+            "booking_url": "https://www.thrillophilia.com/tours/goa-water-sports",
+            "maps_url": "https://maps.google.com/?q=Calangute+Beach+Goa",
+            "rating": 4.5,
+            "notes": "Book early morning slot to avoid crowds. Life jackets provided."
+        },
+        {
+            "type": "activity",
+            "name": "Dolphin Watching Boat Trip",
+            "description": "1.5 hr boat trip to spot spinner dolphins in the Arabian Sea. Kids love it!",
+            "cost_inr": 800,
+            "duration": "2 hrs",
+            "location": "Sinquerim Beach, Goa",
+            "booking_url": "https://www.thrillophilia.com/tours/goa-dolphin-trip",
+            "maps_url": "https://maps.google.com/?q=Sinquerim+Beach+Goa",
+            "rating": 4.6,
+            "notes": "Per person. Departs 7 AM and 4 PM. Carry sunscreen!"
+        }
+    ],
+    "days": [
+        {
+            "day_number": 1,
+            "title": "Day 1 – Fly In + Beach Arrival",
+            "highlights": [
+                "Arrive in Paradise",
+                "Baga Beach sunset"
+            ],
+            "total_cost_inr": 16000,
+            "blocks": [
+                {
+                    "time": "7:00 AM – 8:30 AM",
+                    "activity": "Fly Mumbai → Goa",
+                    "description": "Early morning IndiGo flight. Arrive Dabolim Airport by 8:30 AM.",
+                    "location": "Goa Airport",
+                    "maps_url": "https://maps.google.com/?q=Goa+Airport",
+                    "cost_inr": 14000,
+                    "booking_url": "https://www.makemytrip.com/flights/",
+                    "tips": "Pack kids essentials in carry-on. Airport taxi pre-book (~₹600)."
+                },
+                {
+                    "time": "9:30 AM – 11:00 AM",
+                    "activity": "Check-in & Freshen Up",
+                    "description": "Arrive at resort, check in early (or store bags), freshen up.",
+                    "location": "Calangute, Goa",
+                    "maps_url": "https://maps.google.com/?q=Calangute+Beach+Hotels+Goa",
+                    "cost_inr": 0,
+                    "booking_url": "https://www.goibibo.com/hotels/goa/",
+                    "tips": null
+                },
+                {
+                    "time": "11:30 AM – 1:30 PM",
+                    "activity": "First Beach Experience – Calangute",
+                    "description": "First dip in the Arabian Sea! Build sandcastles with kids, splash in the waves.",
+                    "location": "Calangute Beach, Goa",
+                    "maps_url": "https://maps.google.com/?q=Calangute+Beach+Goa",
+                    "cost_inr": 0,
+                    "booking_url": null,
+                    "tips": "Apply SPF 50 sunscreen. Rent beach beds for ₹100/couple."
+                },
+                {
+                    "time": "2:00 PM – 3:00 PM",
+                    "activity": "Seafood Lunch at Infantaria",
+                    "description": "Famous Goa bakery-restaurant for prawn curry rice, crab masala, and Goan fish thali",
+                    "location": "Calangute, Goa",
+                    "maps_url": "https://maps.google.com/?q=Infantaria+Calangute+Goa",
+                    "cost_inr": 1500,
+                    "booking_url": null,
+                    "tips": "The pork chilli fry is legendary. Kids menu available."
+                },
+                {
+                    "time": "5:30 PM – 7:30 PM",
+                    "activity": "Baga Beach Sunset",
+                    "description": "Walk to Baga Beach for the golden sunset. Explore the vibrant beach shacks.",
+                    "location": "Baga Beach, Goa",
+                    "maps_url": "https://maps.google.com/?q=Baga+Beach+Goa",
+                    "cost_inr": 0,
+                    "booking_url": null,
+                    "tips": null
+                },
+                {
+                    "time": "8:00 PM – 9:30 PM",
+                    "activity": "Dinner at Britto's Beach Shack",
+                    "description": "Iconic Baga Beach restaurant with live music, fresh seafood, Goan sausage pasta",
+                    "location": "Baga Beach, Goa",
+                    "maps_url": "https://maps.google.com/?q=Brittos+Baga+Beach+Goa",
+                    "cost_inr": 1800,
+                    "booking_url": null,
+                    "tips": "Arrive before 8 PM to get a table. Kids menu available."
+                }
+            ]
+        },
+        {
+            "day_number": 2,
+            "title": "Day 2 – Water Sports & Dolphin Adventure",
+            "highlights": [
+                "Dolphin Watching",
+                "Parasailing & Jet Ski",
+                "Fort Aguada"
+            ],
+            "total_cost_inr": 6500,
+            "blocks": [
+                {
+                    "time": "7:00 AM – 9:30 AM",
+                    "activity": "Dolphin Watching Boat Trip",
+                    "description": "Sunrise boat trip to spot spinner dolphins. Magical experience for kids!",
+                    "location": "Sinquerim Beach, Goa",
+                    "maps_url": "https://maps.google.com/?q=Sinquerim+Beach+Goa",
+                    "cost_inr": 3200,
+                    "booking_url": "https://www.thrillophilia.com/tours/goa-dolphin-trip",
+                    "tips": "₹800 per person × 4. Departs 7 AM sharp. Carry motion sickness pills for kids."
+                },
+                {
+                    "time": "10:00 AM – 1:00 PM",
+                    "activity": "Water Sports – Parasailing & Jet Ski",
+                    "description": "Family water sports package – banana boat, parasailing (adults), jet ski, bumper boat (kids)",
+                    "location": "Calangute Beach, Goa",
+                    "maps_url": "https://maps.google.com/?q=Calangute+Beach+Goa",
+                    "cost_inr": 3000,
+                    "booking_url": "https://www.thrillophilia.com/tours/goa-water-sports",
+                    "tips": "Life jackets mandatory. Under 14 kids can do banana boat & bumper ride."
+                },
+                {
+                    "time": "2:00 PM – 3:00 PM",
+                    "activity": "Lunch at Calangute Beach Shack",
+                    "description": "Quick beach lunch – Goan fish curry rice, grilled lobster, fresh coconut water",
+                    "location": "Calangute Beach",
+                    "maps_url": "https://maps.google.com/?q=Calangute+Beach+Goa",
+                    "cost_inr": 1200,
+                    "booking_url": null,
+                    "tips": null
+                },
+                {
+                    "time": "4:00 PM – 6:00 PM",
+                    "activity": "Fort Aguada & Sinquerim Beach",
+                    "description": "Historic 17th century Portuguese fort with lighthouse and 360° ocean views. Kids love it!",
+                    "location": "Fort Aguada, Goa",
+                    "maps_url": "https://maps.google.com/?q=Fort+Aguada+Goa",
+                    "cost_inr": 0,
+                    "booking_url": null,
+                    "tips": "Free entry. Carry water. Great photo spot."
+                }
+            ]
+        },
+        {
+            "day_number": 3,
+            "title": "Day 3 – Old Goa Heritage & South Beaches",
+            "highlights": [
+                "Basilica of Bom Jesus",
+                "Palolem Beach"
+            ],
+            "total_cost_inr": 4500,
+            "blocks": [
+                {
+                    "time": "9:00 AM – 12:00 PM",
+                    "activity": "Old Goa – Basilica of Bom Jesus",
+                    "description": "UNESCO World Heritage Site – Baroque churches, St. Francis Xavier's incorruptible remains, stunning architecture",
+                    "location": "Old Goa, Panaji",
+                    "maps_url": "https://maps.google.com/?q=Basilica+of+Bom+Jesus+Goa",
+                    "cost_inr": 100,
+                    "booking_url": null,
+                    "tips": "Free entry to most churches; donation box inside. Dress modestly."
+                },
+                {
+                    "time": "1:00 PM – 2:00 PM",
+                    "activity": "Lunch at Panaji Market",
+                    "description": "Traditional Goan lunch – bebinca dessert, fish thali, sol kadi",
+                    "location": "Panaji, Goa",
+                    "maps_url": "https://maps.google.com/?q=Panaji+Market+Goa",
+                    "cost_inr": 1500,
+                    "booking_url": null,
+                    "tips": null
+                },
+                {
+                    "time": "3:00 PM – 6:30 PM",
+                    "activity": "Palolem Beach, South Goa",
+                    "description": "Crescent-shaped paradise beach – calm waters, perfect for kids, kayaking, boat trips to Honeymoon Island",
+                    "location": "Palolem Beach, South Goa",
+                    "maps_url": "https://maps.google.com/?q=Palolem+Beach+Goa",
+                    "cost_inr": 500,
+                    "booking_url": null,
+                    "tips": "1.5 hr drive from North Goa. Worth every minute! Calmer waters than North Goa."
+                }
+            ]
+        },
+        {
+            "day_number": 4,
+            "title": "Day 4 – Spice Farm, Markets & Night Market",
+            "highlights": [
+                "Sahakari Spice Farm",
+                "Anjuna Flea Market",
+                "Night Market"
+            ],
+            "total_cost_inr": 4000,
+            "blocks": [
+                {
+                    "time": "9:00 AM – 12:00 PM",
+                    "activity": "Sahakari Spice Plantation Tour",
+                    "description": "Guided tour of a working spice farm – see cardamom, pepper, vanilla, followed by traditional Goan lunch. Elephant interaction!",
+                    "location": "Ponda, South Goa",
+                    "maps_url": "https://maps.google.com/?q=Sahakari+Spice+Farm+Goa",
+                    "cost_inr": 2000,
+                    "booking_url": "https://www.thrillophilia.com/tours/goa-spice-plantation-tour",
+                    "tips": "₹500/person includes lunch. Kids LOVE the elephant feeding."
+                },
+                {
+                    "time": "3:00 PM – 6:00 PM",
+                    "activity": "Anjuna Flea Market (Wednesday) / Mapusa Fri Market",
+                    "description": "Famous hippie flea market with handicrafts, spices, clothing, jewelry. Great for souvenirs.",
+                    "location": "Anjuna, Goa",
+                    "maps_url": "https://maps.google.com/?q=Anjuna+Flea+Market+Goa",
+                    "cost_inr": 0,
+                    "booking_url": null,
+                    "tips": "Bargain hard – initial prices 3× higher. Cash preferred."
+                },
+                {
+                    "time": "7:00 PM – 10:00 PM",
+                    "activity": "Baga Saturday Night Market (Arpora)",
+                    "description": "Illuminated night market with 200+ stalls, street food, live music, fire shows. Family friendly!",
+                    "location": "Arpora, North Goa",
+                    "maps_url": "https://maps.google.com/?q=Arpora+Saturday+Night+Market+Goa",
+                    "cost_inr": 1500,
+                    "booking_url": null,
+                    "tips": "Free entry. Starts 6 PM. Kids will love the fire-eaters and acrobats!"
+                }
+            ]
+        },
+        {
+            "day_number": 5,
+            "title": "Day 5 – Lazy Beach Morning + Fly Home",
+            "highlights": [
+                "Sunrise at Vagator",
+                "Departure"
+            ],
+            "total_cost_inr": 2000,
+            "blocks": [
+                {
+                    "time": "6:30 AM – 8:00 AM",
+                    "activity": "Sunrise at Vagator Beach",
+                    "description": "Final Goa sunrise at the dramatic red-cliffed Vagator Beach. Quiet and serene.",
+                    "location": "Vagator Beach, Goa",
+                    "maps_url": "https://maps.google.com/?q=Vagator+Beach+Goa",
+                    "cost_inr": 0,
+                    "booking_url": null,
+                    "tips": "Pack a light snack. One last swim!"
+                },
+                {
+                    "time": "9:00 AM – 10:00 AM",
+                    "activity": "Checkout & Final Goan Breakfast",
+                    "description": "Hotel checkout + famous Goan breakfast: poha, xacuti, fresh bread, Goan tea",
+                    "location": "Calangute, Goa",
+                    "maps_url": null,
+                    "cost_inr": 600,
+                    "booking_url": null,
+                    "tips": null
+                },
+                {
+                    "time": "11:00 AM – 12:00 PM",
+                    "activity": "Taxi to Airport",
+                    "description": "Pre-booked taxi to Dabolim Airport. Allow 45 mins.",
+                    "location": "Goa Airport",
+                    "maps_url": "https://maps.google.com/?q=Goa+Airport",
+                    "cost_inr": 700,
+                    "booking_url": null,
+                    "tips": "Book airport taxi night before."
+                },
+                {
+                    "time": "2:00 PM – 3:30 PM",
+                    "activity": "Fly Goa → Mumbai",
+                    "description": "Return flight to Mumbai. Trip complete!",
+                    "location": "Goa → Mumbai",
+                    "maps_url": null,
+                    "cost_inr": 14000,
+                    "booking_url": "https://www.makemytrip.com/flights/",
+                    "tips": "Already included in Day 1 flight cost total"
+                }
+            ]
+        }
+    ],
+    "total_estimated_cost_inr": 56000,
+    "remaining_budget_inr": 4000,
+    "booking_checklist": [
+        "Book return flights on MakeMyTrip / GoIbibo (4 tickets, mid-week cheaper)",
+        "Reserve hotel rooms 2-3 weeks ahead (mention kids when booking)",
+        "Book water sports package online or at the beach",
+        "Reserve dolphin trip through hotel concierge or Thrillophilia",
+        "Pre-book airport taxis for both arrival and departure"
+    ],
+    "insider_tips": [
+        "North Goa is lively and touristy; South Goa is quieter and pristine — plan both!",
+        "Carry cash (INR) as many beach shacks don't accept cards",
+        "Rent a scooter (₹300/day) for flexibility — use taxi for kids' day trips",
+        "March is shoulder season — hot but less crowded than December/January",
+        "Buy Goan cashews and spices from local shops — better quality and price than airports"
+    ],
+    "weather_summary": "Hot and sunny in March. 28-34°C. Low humidity, sea breeze pleasant. Perfect beach weather. Apply SPF 50+."
+}
