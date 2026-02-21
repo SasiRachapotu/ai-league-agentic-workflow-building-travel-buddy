@@ -123,63 +123,72 @@ def run(
         activities = [BookingOption(**a) for a in data["activities"]]
         return transport, hotel, activities
     except Exception:
-        # Fallback defaults (Rishikesh example)
+        # Fallback defaults — use actual destination and interests
         dest = prefs.destination
+        interests = prefs.interests or ["culture", "nature"]
         transport = BookingOption(
             type="train",
-            name="Jan Shatabdi Express",
-            description=f"{prefs.origin} → Haridwar → {dest} by train + shared cab",
-            cost_inr=550,
-            duration="6-7 hrs",
+            name=f"Express Train to {dest}",
+            description=f"{prefs.origin} → {dest} by train",
+            cost_inr=travel_budget,
+            duration="Varies",
             location=f"{prefs.origin} → {dest}",
             booking_url="https://www.irctc.co.in/",
-            notes="Book 2 weeks in advance for best availability",
+            notes="Book in advance on IRCTC for best availability",
         )
         hotel = BookingOption(
-            type="hostel",
-            name=f"Zostel {dest}",
-            description=f"Popular backpacker hostel in {dest} with great amenities",
+            type="hotel",
+            name=f"Budget Stay in {dest}",
+            description=f"Comfortable budget accommodation in central {dest}",
             cost_inr=stay_budget / max(nights, 1),
             cost_per_night_inr=stay_budget / max(nights, 1),
-            location="Tapovan area",
-            booking_url="https://www.zostel.com/",
-            maps_url=f"https://maps.google.com/?q=Zostel+{dest.replace(' ', '+')}",
-            rating=4.3,
-            notes="Dorm beds available, great community vibe",
+            location=f"Central {dest}",
+            booking_url=f"https://www.goibibo.com/hotels/{dest.lower().replace(' ', '-')}/",
+            maps_url=f"https://maps.google.com/?q=hotels+in+{dest.replace(' ', '+')}",
+            rating=3.8,
+            notes="Check MakeMyTrip and Goibibo for best rates",
         )
-        activities = [
-            BookingOption(
+        # Build interest-aware generic activities for the actual destination
+        activity_templates = {
+            "adventure": ("Adventure Activity", f"Exciting outdoor adventure experience in {dest}", 1200),
+            "spiritual": ("Temple & Spiritual Tour", f"Visit key temples and spiritual sites in {dest}", 200),
+            "cultural": ("Heritage & Culture Walk", f"Guided walk through {dest}'s historical and cultural landmarks", 500),
+            "food": ("Local Food Tour", f"Street food and local cuisine exploration in {dest}", 800),
+            "nature": ("Nature & Parks Tour", f"Explore parks and natural attractions around {dest}", 400),
+            "wildlife": ("Wildlife Safari / Zoo Visit", f"Explore wildlife sanctuaries near {dest}", 1000),
+            "trekking": ("Day Trek", f"Scenic day trek near {dest}", 600),
+            "shopping": ("Local Market Tour", f"Explore {dest}'s vibrant local markets and bazaars", 0),
+            "history": ("Historical Sites Tour", f"Visit forts, monuments and museums in {dest}", 300),
+            "beaches": ("Beach Exploration", f"Explore beaches near {dest}", 200),
+            "nightlife": ("Evening Entertainment", f"Experience {dest}'s nightlife scene", 500),
+            "yoga": ("Yoga & Wellness Session", f"Morning yoga class in {dest}", 400),
+        }
+        activities = []
+        for interest in interests[:4]:  # max 4 activities
+            template = activity_templates.get(interest, (
+                f"{interest.title()} Experience",
+                f"Curated {interest} experience in {dest}",
+                500,
+            ))
+            activities.append(BookingOption(
                 type="activity",
-                name="White Water Rafting",
-                description="16 km stretch – Shivpuri to Rishikesh",
-                cost_inr=1500,
-                duration="3-4 hrs",
+                name=template[0],
+                description=template[1],
+                cost_inr=template[2],
+                duration="2-3 hrs",
                 location=dest,
+                booking_url=f"https://www.thrillophilia.com/places/{dest.lower().replace(' ', '-')}",
+                maps_url=f"https://maps.google.com/?q={interest}+in+{dest.replace(' ', '+')}",
+                notes=f"Book in advance; check local guides in {dest}",
+            ))
+        if not activities:  # ultimate fallback
+            activities = [BookingOption(
+                type="activity",
+                name=f"City Sightseeing Tour — {dest}",
+                description=f"Explore the best of {dest} with a local guide",
+                cost_inr=800, duration="4 hrs", location=dest,
                 booking_url="https://www.thrillophilia.com/",
-                maps_url=f"https://maps.google.com/?q=Shivpuri+{dest.replace(' ', '+')}",
-                notes="Book 1 day in advance",
-            ),
-            BookingOption(
-                type="activity",
-                name="Ganga Aarti – Triveni Ghat",
-                description="Spiritual fire ritual at sunset on the Ganges",
-                cost_inr=0,
-                duration="1.5 hrs",
-                location="Triveni Ghat, Rishikesh",
-                booking_url="https://maps.google.com/?q=Triveni+Ghat+Rishikesh",
-                maps_url="https://maps.google.com/?q=Triveni+Ghat+Rishikesh",
-                notes="Arrive 30 mins early for a good spot",
-            ),
-            BookingOption(
-                type="activity",
-                name="Beatles Ashram",
-                description="Iconic ashram where The Beatles studied meditation",
-                cost_inr=150,
-                duration="2 hrs",
-                location="Rishikesh",
-                booking_url="https://maps.google.com/?q=Beatles+Ashram+Rishikesh",
-                maps_url="https://maps.google.com/?q=Beatles+Ashram+Rishikesh",
-                notes="Photography allowed; carry water",
-            ),
-        ]
+                maps_url=f"https://maps.google.com/?q=sightseeing+{dest.replace(' ', '+')}",
+                notes="Book online or through hotel concierge",
+            )]
         return transport, hotel, activities

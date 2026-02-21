@@ -34,6 +34,12 @@ Return a JSON object with EXACTLY these fields (no extra wrapping):
 
 Rules:
 - If budget mentioned in ₹ or INR, use as-is. If in other currency, convert to INR.
+- If NO budget is mentioned, estimate a REALISTIC budget for this trip:
+  * Solo backpacking (budget): ₹3,000–5,000/day total
+  * Family / mid-range: ₹8,000–15,000/day total
+  * Luxury: ₹20,000+/day total
+  Use duration_days × daily rate as a baseline, then round to nearest ₹1,000.
+  NEVER return 0 for total_budget_inr.
 - If destination is ambiguous (e.g. "mountains"), pick the most famous match.
 - If origin not mentioned, default to "Delhi".
 - If duration not mentioned, default to 3 days.

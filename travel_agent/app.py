@@ -61,16 +61,18 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
 .budget-table { width: 100%; border-collapse: collapse; }
 .budget-table th { background: #1e3a8a; color: white; padding: 10px 14px; text-align: left; }
-.budget-table td { padding: 9px 14px; border-bottom: 1px solid #f1f5f9; }
-.budget-table tr:nth-child(even) td { background: #f8faff; }
+.budget-table td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; color: #0f172a !important; background: #ffffff !important; }
+.budget-table tr:nth-child(even) td { background: #f0f4ff !important; color: #0f172a !important; }
 .budget-total td { background: #1e3a8a !important; color: white !important; font-weight: 700; }
 
 .booking-card {
-    background: white; border-radius: 12px; padding: 16px 20px;
+    background: #ffffff !important; border-radius: 12px; padding: 16px 20px;
     border: 1px solid #e2e8f0; margin-bottom: 12px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05); color: #0f172a !important;
 }
-.booking-card h4 { color: #1e3a8a; margin: 0 0 8px 0; font-size: 1rem; }
+.booking-card h4 { color: #1e3a8a !important; margin: 0 0 8px 0; font-size: 1rem; }
+.booking-card b { color: #0f172a !important; }
+.booking-card span, .booking-card div { color: #0f172a !important; }
 
 .day-card {
     background: white; border-radius: 16px; padding: 20px 24px;
@@ -189,9 +191,10 @@ with st.sidebar:
             color = "#22c55e" if log["status"] == "done" else ("#f59e0b" if log["status"] == "running" else "#ef4444")
             st.markdown(f"""
             <div style="background:white;border-left:3px solid {color};padding:6px 10px;
-                        border-radius:6px;margin:4px 0;font-size:0.8rem;">
-                {icon} <b>{log['agent']}</b><br/>
-                <span style="color:#64748b;">{log['time']}</span> — {log['message']}
+                        border-radius:6px;margin:4px 0;font-size:0.8rem;color:#0f172a;">
+                {icon} <b style="color:#0f172a;">{log['agent']}</b><br/>
+                <span style="color:#64748b;">{log['time']}</span>
+                <span style="color:#334155;"> — {log['message']}</span>
             </div>
             """, unsafe_allow_html=True)
 
@@ -304,6 +307,12 @@ if st.session_state.active_tab == "🏠 Plan Trip":
         st.markdown(f"**Interests:** " + " ".join([f'<span class="badge">🏷️ {i}</span>' for i in prefs.interests]), unsafe_allow_html=True)
         st.markdown(f"**Travel Dates:** {prefs.travel_dates or 'Flexible'}  |  **From:** {prefs.origin}")
 
+        # Show notice if AI estimated the budget (user didn't mention one)
+        raw_lower = (prefs.raw_input or "").lower()
+        budget_mentioned = any(kw in raw_lower for kw in ["₹", "inr", "budget", "rs.", "rupee", "k budget", "thousand"])
+        if not budget_mentioned and prefs.total_budget_inr > 0:
+            st.info(f"💡 **Budget not specified** — AI estimated **₹{prefs.total_budget_inr:,.0f}** based on your travel style and duration. You can adjust this by mentioning a budget in your query.")
+
         st.markdown("---")
         st.markdown("#### 🗺️ Choose Your Plan")
 
@@ -311,19 +320,22 @@ if st.session_state.active_tab == "🏠 Plan Trip":
             is_rec = opt.recommended
             label_class = "rec" if is_rec else ""
             card_class = "plan-card recommended" if is_rec else "plan-card"
+            # Pre-compute badge so f-string never has a blank line (Streamlit bug workaround)
+            rec_badge = '<span style="background:#bbf7d0;color:#15803d;border-radius:20px;padding:2px 10px;font-size:0.78rem;font-weight:600;margin-left:8px;">⭐ Recommended</span>' if is_rec else '<span></span>'
+            highlights_str = " · ".join(opt.highlights)
+            pros_str = " · ".join(opt.pros)
+            cons_str = " · ".join(opt.cons)
+            cost_str = f"₹{opt.estimated_total_inr:,.0f}" if opt.estimated_total_inr else "See details"
 
             with st.container():
-                st.markdown(f"""
-                <div class="{card_class}">
-                    <span class="plan-label {label_class}">Option {opt.label}</span>
-                    {'<span style="background:#bbf7d0;color:#15803d;border-radius:20px;padding:2px 10px;font-size:0.78rem;font-weight:600;margin-left:8px;">⭐ Recommended</span>' if is_rec else ""}
-                    <h4 style="margin:6px 0 4px;color:#0f172a;">{opt.style}</h4>
-                    <div style="font-size:1.1rem;font-weight:700;color:#1e3a8a;margin-bottom:8px;">₹{opt.estimated_total_inr:,.0f}</div>
-                    <b>Highlights:</b> {" · ".join(opt.highlights)}<br/>
-                    <span style="color:#16a34a">✓ {" · ".join(opt.pros)}</span><br/>
-                    <span style="color:#dc2626">✗ {" · ".join(opt.cons)}</span>
-                </div>
-                """, unsafe_allow_html=True)
+                st.markdown(f"""<div class="{card_class}">
+<span class="plan-label {label_class}">Option {opt.label}</span> {rec_badge}
+<h4 style="margin:6px 0 4px;color:#0f172a;">{opt.style}</h4>
+<div style="font-size:1.1rem;font-weight:700;color:#1e3a8a;margin-bottom:8px;">{cost_str}</div>
+<b>Highlights:</b> {highlights_str}<br/>
+<span style="color:#16a34a">✓ {pros_str}</span><br/>
+<span style="color:#dc2626">✗ {cons_str}</span>
+</div>""", unsafe_allow_html=True)
 
                 if st.button(f"✅ Select Option {opt.label}", key=f"select_{opt.label}", use_container_width=True, type="primary" if is_rec else "secondary"):
                     add_log("Orchestrator", "running", f"User selected Option {opt.label} — {opt.style}")
@@ -354,7 +366,7 @@ if st.session_state.active_tab == "🏠 Plan Trip":
         # Budget table
         table_rows = ""
         for cat in budget.categories:
-            pct = int(cat.amount_inr / prefs.total_budget_inr * 100)
+            pct = int(cat.amount_inr / max(prefs.total_budget_inr, 1) * 100)
             bar = "█" * (pct // 5) + "░" * (20 - pct // 5)
             table_rows += f"<tr><td><b>{cat.category}</b></td><td>₹{cat.amount_inr:,.0f}</td><td style='font-size:0.8rem;color:#64748b;'>{cat.description}</td><td style='font-family:monospace;font-size:0.75rem;color:#2563eb;'>{bar} {pct}%</td></tr>"
 
