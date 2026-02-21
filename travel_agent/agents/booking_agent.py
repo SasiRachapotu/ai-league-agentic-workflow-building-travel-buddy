@@ -5,7 +5,7 @@ Checkpoint 3: Booking Cart.
 """
 import json
 import re
-from tools.gemini_client import generate
+from tools.openai_client import generate
 from tools.tavily_tool import search_to_context
 from models.schemas import TravelerPreferences, PlanOption, BudgetBreakdown, BookingOption
 

@@ -5,7 +5,7 @@ Allocates the total budget across categories with smart trade-offs.
 """
 import json
 import re
-from tools.gemini_client import generate
+from tools.openai_client import generate
 from models.schemas import TravelerPreferences, PlanOption, BudgetBreakdown, BudgetCategory
 
 

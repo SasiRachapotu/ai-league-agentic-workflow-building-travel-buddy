@@ -5,7 +5,7 @@ Uses Gemini with a structured JSON output prompt.
 """
 import json
 import re
-from tools.gemini_client import generate
+from tools.openai_client import generate
 from models.schemas import TravelerPreferences, TravelStyle
 
 

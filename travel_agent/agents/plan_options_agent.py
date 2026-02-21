@@ -5,7 +5,7 @@ Each option has a different theme, estimated cost, highlights, pros/cons.
 """
 import json
 import re
-from tools.gemini_client import generate
+from tools.openai_client import generate
 from tools.tavily_tool import search_to_context
 from tools.weather_tool import get_weather_summary
 from models.schemas import TravelerPreferences, PlanOption
