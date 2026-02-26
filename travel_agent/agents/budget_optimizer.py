@@ -10,18 +10,24 @@ from models.schemas import TravelerPreferences, PlanOption, BudgetBreakdown, Bud
 
 
 BUDGET_PROMPT = """
-You are a travel budget optimization expert.
+You are a travel budget optimization expert. Allocate a trip budget with STRICT math constraints.
 
 Traveler:
 - Destination: {destination}
-- Duration: {duration_days} days
-- Total Budget: ₹{budget}
-- Style: {style}
+- Duration: {duration_days} days ({nights} nights)
+- TOTAL BUDGET: ₹{budget} (this is the hard limit — you MUST NOT exceed it)
+- Travel Style: {style}
 - Accommodation: {accommodation}
-- Selected Plan: {plan_label} – {plan_style} (est. ₹{plan_cost})
+- Selected Plan: Option {plan_label} – {plan_style}
 
-Allocate the budget across these categories for {duration_days} days.
-Return JSON with EXACTLY this structure:
+STRICT RULES — violating these is wrong:
+1. The Buffer row is FIXED at ₹{min_buffer}. Do not change it.
+2. The remaining ₹{spending_limit} must be split across the other 7 categories.
+3. Sum of all 8 rows (including Buffer) MUST equal exactly ₹{budget}.
+4. Every amount must be a round number (multiple of 50 or 100). No decimals.
+5. Return valid JSON only. No markdown fences.
+
+Return EXACTLY this JSON structure:
 {{
   "plan_label": "{plan_label}",
   "categories": [
@@ -32,38 +38,37 @@ Return JSON with EXACTLY this structure:
     {{"category": "Local Transport", "amount_inr": <number>, "description": "<within destination>"}},
     {{"category": "Entry Fees", "amount_inr": <number>, "description": "<sites + attractions>"}},
     {{"category": "Miscellaneous", "amount_inr": <number>, "description": "<tips, SIM, emergencies>"}},
-    {{"category": "Buffer", "amount_inr": <number>, "description": "Emergency reserve"}}
+    {{"category": "Buffer", "amount_inr": {min_buffer}, "description": "Emergency reserve"}}
   ],
-  "projected_total_inr": <sum of all amounts>,
-  "remaining_buffer_inr": <budget - projected_total_inr>,
-  "optimization_notes": "<2-3 sentence explanation of key trade-offs made>"
+  "projected_total_inr": {budget},
+  "remaining_buffer_inr": 0,
+  "optimization_notes": "<2-3 sentences on trade-offs made>"
 }}
 
-Rules:
-- Sum of all category amounts = projected_total_inr
-- projected_total_inr MUST be < {budget}
-- remaining_buffer_inr = {budget} - projected_total_inr
-- Buffer category should be at least ₹{min_buffer}
-- Return valid JSON ONLY. No markdown.
+Verify before responding: sum all 8 amount_inr values. They MUST add up to exactly ₹{budget}.
 """
 
 
 def run(prefs: TravelerPreferences, selected_option: PlanOption) -> BudgetBreakdown:
     """Optimize budget allocation for the selected plan."""
     nights = prefs.duration_days - 1
-    min_buffer = max(500, prefs.total_budget_inr * 0.05)
+    budget = int(prefs.total_budget_inr)
+    min_buffer = max(500, int(budget * 0.05))
+    # Round min_buffer to nearest 100 for clean numbers
+    min_buffer = round(min_buffer / 100) * 100
+    spending_limit = budget - min_buffer  # what's left after reserving buffer
 
     prompt = BUDGET_PROMPT.format(
         destination=prefs.destination,
         duration_days=prefs.duration_days,
-        budget=prefs.total_budget_inr,
+        budget=budget,
         style=prefs.travel_style.value,
         accommodation=prefs.accommodation_preference,
         plan_label=selected_option.label,
         plan_style=selected_option.style,
-        plan_cost=selected_option.estimated_total_inr,
         nights=nights,
-        min_buffer=int(min_buffer),
+        min_buffer=min_buffer,
+        spending_limit=spending_limit,
     )
 
     raw = generate(prompt, temperature=0.3)
@@ -76,8 +81,35 @@ def run(prefs: TravelerPreferences, selected_option: PlanOption) -> BudgetBreakd
 
     try:
         data = json.loads(raw)
-        data["categories"] = [BudgetCategory(**c) for c in data["categories"]]
-        return BudgetBreakdown(**data)
+        categories = [BudgetCategory(**c) for c in data["categories"]]
+
+        # Safety clamp: if LLM still exceeded the budget, trim the last
+        # non-buffer category by the overshoot amount so amounts stay clean.
+        actual_total = sum(c.amount_inr for c in categories)
+        if actual_total > budget:
+            overshoot = actual_total - budget
+            # Find last non-buffer category and reduce it
+            for i in range(len(categories) - 1, -1, -1):
+                if categories[i].category.lower() != "buffer":
+                    new_amount = max(0, categories[i].amount_inr - overshoot)
+                    categories[i] = BudgetCategory(
+                        category=categories[i].category,
+                        amount_inr=new_amount,
+                        description=categories[i].description,
+                    )
+                    break
+            actual_total = sum(c.amount_inr for c in categories)
+
+        actual_total = round(actual_total, 0)
+        actual_buffer = max(0.0, round(budget - actual_total, 0))
+
+        return BudgetBreakdown(
+            plan_label=data.get("plan_label", selected_option.label),
+            categories=categories,
+            projected_total_inr=actual_total,
+            remaining_buffer_inr=actual_buffer,
+            optimization_notes=data.get("optimization_notes", ""),
+        )
     except Exception:
         # Fallback proportional breakdown
         b = prefs.total_budget_inr

@@ -23,6 +23,7 @@ Traveler:
 - Budget for Activities: ₹{activities_budget} total
 - Accommodation pref: {accommodation}
 - Interests: {interests}
+- Suggested transport mode: {transport_hint} (MUST use this mode — do not switch to a different mode)
 
 Web Search Context:
 {web_context}
@@ -83,13 +84,31 @@ def run(
 ) -> tuple[BookingOption, BookingOption, list[BookingOption]]:
     """Find bookable transport, hotel, and activities."""
 
-    travel_budget = next((c.amount_inr for c in budget.categories if "Travel" in c.category), prefs.total_budget_inr * 0.07)
+    # Extract transport mode from budget description so booking agent stays consistent
+    travel_cat = next((c for c in budget.categories if "Travel" in c.category), None)
+    travel_budget = travel_cat.amount_inr if travel_cat else prefs.total_budget_inr * 0.07
+    travel_desc = travel_cat.description if travel_cat else ""
+
     stay_budget = next((c.amount_inr for c in budget.categories if "Stay" in c.category), prefs.total_budget_inr * 0.25)
     activities_budget = next((c.amount_inr for c in budget.categories if "Activities" in c.category), prefs.total_budget_inr * 0.25)
     nights = prefs.duration_days - 1
 
+    # Detect transport mode from budget description
+    _desc_lower = travel_desc.lower()
+    if "flight" in _desc_lower or "fly" in _desc_lower or "air" in _desc_lower:
+        transport_mode = "flight"
+        transport_hint = f"Flight (as suggested in budget: {travel_desc})"
+    elif "train" in _desc_lower or "rail" in _desc_lower:
+        transport_mode = "train"
+        transport_hint = f"Train (as suggested in budget: {travel_desc})"
+    else:
+        transport_mode = "bus"
+        transport_hint = f"Bus (as suggested in budget: {travel_desc})"
+
+    # Tailor the Tavily search query to match the transport mode
     web_context = search_to_context(
-        f"{prefs.origin} to {prefs.destination} train bus best hostel hotel {prefs.destination} activities booking",
+        f"{prefs.origin} to {prefs.destination} {transport_mode} booking "
+        f"best hostel hotel {prefs.destination} activities",
         max_results=5,
     )
 
@@ -106,6 +125,7 @@ def run(
         accommodation=prefs.accommodation_preference,
         interests=", ".join(prefs.interests),
         web_context=web_context,
+        transport_hint=transport_hint,
     )
 
     raw = generate(prompt, temperature=0.4)

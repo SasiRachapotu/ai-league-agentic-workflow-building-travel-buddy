@@ -228,6 +228,72 @@ if st.session_state.active_tab == "🏠 Plan Trip":
 
     # ── STAGE 0: Input ───────────────────────────────────────────────────────
     if st.session_state.stage == 0:
+
+        # ── Handle returning from origin-confirm rerun ────────────────────────
+        # Must run at the very top, BEFORE any widgets render, so Streamlit
+        # doesn't stomp over our local variables on the fresh rerun.
+        _assembled = st.session_state.pop("_assembled_input", None)
+        if _assembled:
+            with st.spinner("🤖 AI agents are researching your trip..."):
+                try:
+                    add_log("Intent Parser", "running", "Parsing your travel preferences...")
+                    from agents import intent_parser
+                    prefs = intent_parser.run(_assembled, date_context="February 2026")
+                    st.session_state.preferences = prefs
+                    add_log("Intent Parser", "done", f"Parsed: {prefs.destination}, {prefs.duration_days} days, ₹{prefs.total_budget_inr:,.0f}")
+                    if st.session_state.persona:
+                        prefs.persona = st.session_state.persona
+                    add_log("Plan Options Agent", "running", f"Generating 3 plan options for {prefs.destination}...")
+                    from agents import plan_options_agent
+                    options = plan_options_agent.run(prefs, persona=st.session_state.persona)
+                    st.session_state.plan_options = options
+                    add_log("Plan Options Agent", "done", f"Generated {len(options)} options (A/B/C)")
+                    add_log("Debate Agent", "running", "Generating trade-off analysis across 5 axes...")
+                    try:
+                        from agents import debate_agent
+                        debate = debate_agent.run(prefs, options)
+                        st.session_state.debate = debate
+                        add_log("Debate Agent", "done", "Trade-off analysis complete")
+                    except Exception as _de:
+                        add_log("Debate Agent", "error", f"Skipped: {_de}")
+                        st.session_state.debate = None
+                    st.session_state.stage = 1
+                    st.rerun()
+                except ValueError as e:
+                    st.error(f"⚠️ {e}\n\nAdd your OPENAI_API_KEY to the .env file and restart.")
+                except Exception as e:
+                    st.error(f"Agent error: {e}")
+            st.stop()
+
+        # ── Origin form — rendered OUTSIDE plan_btn guard ─────────────────────
+        # When _awaiting_origin is set, show just the city input and Confirm.
+        # Works because this block runs every rerun regardless of plan_btn.
+        if st.session_state.get("_awaiting_origin"):
+            st.markdown("### 🧳 Tell me about your trip")
+            st.info("📍 **Where are you traveling from?** Your departure city wasn't detected.")
+            _origin_val = st.text_input(
+                "Departure city",
+                placeholder="e.g. Delhi, Mumbai, Bangalore...",
+                key="origin_input",
+            )
+            _oc1, _oc2 = st.columns(2)
+            with _oc1:
+                if st.button("✅ Confirm & Start Planning", type="primary", use_container_width=True, key="confirm_origin_btn"):
+                    if _origin_val.strip():
+                        _base = st.session_state.pop("_pending_input", "")
+                        st.session_state["_assembled_input"] = _base + f" Traveling from {_origin_val.strip()}."
+                        st.session_state.pop("_awaiting_origin", None)
+                        st.session_state.pop("origin_input", None)
+                        st.rerun()
+                    else:
+                        st.error("Please enter your departure city to continue.")
+            with _oc2:
+                if st.button("← Back", use_container_width=True, key="back_from_origin_btn"):
+                    st.session_state.pop("_awaiting_origin", None)
+                    st.session_state.pop("_pending_input", None)
+                    st.rerun()
+            st.stop()
+
         st.markdown("### 🧳 Tell me about your trip")
 
         # ── Persona Selector ─────────────────────────────────────────────────
@@ -298,6 +364,7 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                 user_input = "Weekend getaway to Coorg from Bangalore. 2 days, budget ₹8,000. Love nature, coffee estates, trekking. Solo trip."
                 plan_btn = True
 
+
         if plan_btn and user_input:
             # ── Input validation ────────────────────────────────────────────────
             _stripped = user_input.strip()
@@ -325,29 +392,12 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                 ]
                 _has_origin = any(kw in _stripped.lower() for kw in _FROM_KEYWORDS)
 
-                if not _has_origin and "origin_input" not in st.session_state:
+                if not _has_origin:
+                    # Hand off to the origin form block above (outside plan_btn guard)
                     st.session_state["_pending_input"] = _stripped
-
-                if not _has_origin and "origin_input" not in st.session_state:
-                    st.info("📍 **Where are you traveling from?** Your departure city wasn't detected.")
-                    _origin_val = st.text_input(
-                        "Departure city",
-                        placeholder="e.g. Delhi, Mumbai, Bangalore...",
-                        key="origin_input",
-                    )
-                    if st.button("✅ Confirm & Start Planning", type="primary", key="confirm_origin_btn"):
-                        if _origin_val.strip():
-                            user_input = st.session_state.get("_pending_input", _stripped) + f" Traveling from {_origin_val.strip()}."
-                            del st.session_state["origin_input"]
-                            st.session_state.pop("_pending_input", None)
-                            st.rerun()
-                        else:
-                            st.error("Please enter your departure city to continue.")
+                    st.session_state["_awaiting_origin"] = True
+                    st.rerun()
                 else:
-                    # Clear any stale origin state
-                    st.session_state.pop("origin_input", None)
-                    st.session_state.pop("_pending_input", None)
-
                     with st.spinner("🤖 AI agents are researching your trip..."):
                         try:
                             # Intent Parser
