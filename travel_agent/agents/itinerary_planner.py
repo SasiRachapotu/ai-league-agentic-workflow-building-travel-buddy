@@ -12,8 +12,17 @@ from models.schemas import (
 )
 
 
+PERSONA_INSTRUCTIONS = {
+    "Backpacker": "The traveler is a budget-conscious solo backpacker. Prioritize hostels, shared transport, free/cheap local experiences, and social activities. Avoid luxury options.",
+    "Family": "The traveler is on a family trip with kids. Prioritize safety, kid-friendly activities, comfortable transport, and avoid overly adventurous or risky activities. Add meal-break time.",
+    "Adrenaline Junkie": "The traveler craves intensity and adventure. Fill the itinerary with high-adrenaline activities (rafting, trekking, cliff diving, paragliding). Skip slow cultural activities unless unique.",
+    "Spiritual Seeker": "The traveler wants inner peace and spiritual depth. Prioritize ashrams, meditation centers, temples, yoga, and quiet nature. Avoid crowded tourist spots and nightlife.",
+}
+
 ITINERARY_PROMPT = """
 You are an expert travel itinerary planner. Build a detailed day-by-day itinerary.
+
+Persona Directive: {persona_instruction}
 
 Traveler:
 - Destination: {destination}
@@ -80,6 +89,7 @@ def run(
     transport: BookingOption,
     hotel: BookingOption,
     activities: list[BookingOption],
+    persona: str = "",
 ) -> ItineraryPlan:
     """Build a full day-by-day itinerary."""
 
@@ -90,6 +100,8 @@ def run(
         f"{prefs.destination} travel itinerary day by day tips local food",
         max_results=4,
     )
+
+    persona_instruction = PERSONA_INSTRUCTIONS.get(persona, "Plan the trip according to the traveler's stated preferences and interests.")
 
     prompt = ITINERARY_PROMPT.format(
         destination=prefs.destination,
@@ -108,6 +120,7 @@ def run(
         hotel_cost=hotel.cost_per_night_inr or hotel.cost_inr,
         activities_summary=activities_summary,
         web_context=web_context,
+        persona_instruction=persona_instruction,
     )
 
     raw = generate(prompt, temperature=0.6)

@@ -24,6 +24,7 @@ class TravelerPreferences(BaseModel):
     constraints: List[str] = Field(default_factory=list, description="Special constraints or preferences")
     accommodation_preference: Literal["budget", "mid-range", "luxury"] = "budget"
     food_preference: Literal["veg", "non-veg", "both"] = "both"
+    persona: Optional[str] = Field(default=None, description="Traveler persona e.g. 'Backpacker', 'Adrenaline Junkie'")
 
 
 class PlanOption(BaseModel):
@@ -83,6 +84,15 @@ class DayPlan(BaseModel):
     highlights: List[str]
 
 
+class ContingencyPlan(BaseModel):
+    risk: str
+    likelihood: Literal["Low", "Medium", "High"]
+    description: str
+    fallback_action: str
+    fallback_url: str
+    budget_impact_inr: float = 0
+
+
 class ItineraryPlan(BaseModel):
     preferences: TravelerPreferences
     selected_option: PlanOption
@@ -96,6 +106,7 @@ class ItineraryPlan(BaseModel):
     booking_checklist: List[str]
     insider_tips: List[str]
     weather_summary: Optional[str] = None
+    contingency_plans: Optional[List[ContingencyPlan]] = None
 
 
 class WeatherInfo(BaseModel):
