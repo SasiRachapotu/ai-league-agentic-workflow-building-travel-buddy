@@ -299,43 +299,93 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                 plan_btn = True
 
         if plan_btn and user_input:
-            with st.spinner("🤖 AI agents are researching your trip..."):
-                try:
-                    # Intent Parser
-                    add_log("Intent Parser", "running", "Parsing your travel preferences...")
-                    from agents import intent_parser
-                    prefs = intent_parser.run(user_input, date_context="February 2026")
-                    st.session_state.preferences = prefs
-                    add_log("Intent Parser", "done", f"Parsed: {prefs.destination}, {prefs.duration_days} days, ₹{prefs.total_budget_inr:,.0f}")
+            # ── Input validation ────────────────────────────────────────────────
+            _stripped = user_input.strip()
 
-                    # Attach persona to preferences
-                    if st.session_state.persona:
-                        prefs.persona = st.session_state.persona
+            # 1. Reject very short / vague prompts
+            _TRAVEL_KEYWORDS = [
+                "trip", "travel", "visit", "tour", "vacation", "holiday", "trek",
+                "plan", "days", "budget", "go to", "explore", "weekend",
+            ]
+            _is_travel = any(kw in _stripped.lower() for kw in _TRAVEL_KEYWORDS)
+            _is_greeting = _stripped.lower() in {"hi", "hello", "hey", "help", "what", "how"}
 
-                    # Plan Options Agent (persona-aware)
-                    add_log("Plan Options Agent", "running", f"Generating 3 plan options for {prefs.destination}...")
-                    from agents import plan_options_agent
-                    options = plan_options_agent.run(prefs, persona=st.session_state.persona)
-                    st.session_state.plan_options = options
-                    add_log("Plan Options Agent", "done", f"Generated {len(options)} options (A/B/C)")
+            if len(_stripped) < 15 or _is_greeting or not _is_travel:
+                st.warning(
+                    "⚠️ Please describe your trip in more detail.\n\n"
+                    "**Required**: destination, approximate duration, and budget.\n\n"
+                    "*Example:* \"Plan a 4-day trip to Manali under ₹20,000 from Delhi. "
+                    "I love trekking and adventure.\""
+                )
+            else:
+                # 2. Check for origin — if missing, ask inline before running agents
+                _FROM_KEYWORDS = [
+                    " from ", "travelling from", "traveling from", "starting from",
+                    "departing from", "leaving from",
+                ]
+                _has_origin = any(kw in _stripped.lower() for kw in _FROM_KEYWORDS)
 
-                    # Debate Agent — trade-off analysis
-                    add_log("Debate Agent", "running", "Generating trade-off analysis across 5 axes...")
-                    try:
-                        from agents import debate_agent
-                        debate = debate_agent.run(prefs, options)
-                        st.session_state.debate = debate
-                        add_log("Debate Agent", "done", "Trade-off analysis complete")
-                    except Exception as _de:
-                        add_log("Debate Agent", "error", f"Skipped: {_de}")
-                        st.session_state.debate = None
+                if not _has_origin and "origin_input" not in st.session_state:
+                    st.session_state["_pending_input"] = _stripped
 
-                    st.session_state.stage = 1
-                    st.rerun()
-                except ValueError as e:
-                    st.error(f"⚠️ {e}\n\nAdd your OPENAI_API_KEY to the .env file and restart.")
-                except Exception as e:
-                    st.error(f"Agent error: {e}")
+                if not _has_origin and "origin_input" not in st.session_state:
+                    st.info("📍 **Where are you traveling from?** Your departure city wasn't detected.")
+                    _origin_val = st.text_input(
+                        "Departure city",
+                        placeholder="e.g. Delhi, Mumbai, Bangalore...",
+                        key="origin_input",
+                    )
+                    if st.button("✅ Confirm & Start Planning", type="primary", key="confirm_origin_btn"):
+                        if _origin_val.strip():
+                            user_input = st.session_state.get("_pending_input", _stripped) + f" Traveling from {_origin_val.strip()}."
+                            del st.session_state["origin_input"]
+                            st.session_state.pop("_pending_input", None)
+                            st.rerun()
+                        else:
+                            st.error("Please enter your departure city to continue.")
+                else:
+                    # Clear any stale origin state
+                    st.session_state.pop("origin_input", None)
+                    st.session_state.pop("_pending_input", None)
+
+                    with st.spinner("🤖 AI agents are researching your trip..."):
+                        try:
+                            # Intent Parser
+                            add_log("Intent Parser", "running", "Parsing your travel preferences...")
+                            from agents import intent_parser
+                            prefs = intent_parser.run(user_input, date_context="February 2026")
+                            st.session_state.preferences = prefs
+                            add_log("Intent Parser", "done", f"Parsed: {prefs.destination}, {prefs.duration_days} days, ₹{prefs.total_budget_inr:,.0f}")
+
+                            # Attach persona to preferences
+                            if st.session_state.persona:
+                                prefs.persona = st.session_state.persona
+
+                            # Plan Options Agent (persona-aware)
+                            add_log("Plan Options Agent", "running", f"Generating 3 plan options for {prefs.destination}...")
+                            from agents import plan_options_agent
+                            options = plan_options_agent.run(prefs, persona=st.session_state.persona)
+                            st.session_state.plan_options = options
+                            add_log("Plan Options Agent", "done", f"Generated {len(options)} options (A/B/C)")
+
+                            # Debate Agent — trade-off analysis
+                            add_log("Debate Agent", "running", "Generating trade-off analysis across 5 axes...")
+                            try:
+                                from agents import debate_agent
+                                debate = debate_agent.run(prefs, options)
+                                st.session_state.debate = debate
+                                add_log("Debate Agent", "done", "Trade-off analysis complete")
+                            except Exception as _de:
+                                add_log("Debate Agent", "error", f"Skipped: {_de}")
+                                st.session_state.debate = None
+
+                            st.session_state.stage = 1
+                            st.rerun()
+                        except ValueError as e:
+                            st.error(f"⚠️ {e}\n\nAdd your OPENAI_API_KEY to the .env file and restart.")
+                        except Exception as e:
+                            st.error(f"Agent error: {e}")
+
 
     # ── STAGE 1: Checkpoint 1 — Plan Options ────────────────────────────────
     elif st.session_state.stage == 1:
@@ -432,7 +482,7 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                 for _axis in _axes:
                     _icon = _AXIS_ICONS.get(_axis, "📊")
                     _winner = _winner_axis.get(_axis, "")
-                    _tbl += "<tr><td style='padding:8px 12px;font-weight:600'>" + _icon + " " + _axis + "</td>"
+                    _tbl += "<tr><td style='padding:8px 12px;font-weight:600;color:#0f172a;'>" + _icon + " " + _axis + "</td>"
                     for _lbl in ["A", "B", "C"]:
                         _sc = _scores.get(_lbl, {}).get(_axis, 5)
                         _bar_w = int(_sc * 10)
@@ -461,7 +511,7 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                             "padding:10px 14px;border-radius:6px;margin:6px 0;"
                             "box-shadow:0 1px 4px rgba(0,0,0,0.06);'>"
                             "<b style='color:" + _col + "'>Option " + _lbl + ":</b>"
-                            "<span style='color:#334155;font-size:0.9rem'> " + str(_reason) + "</span></div>"
+                            "<span style='color:#1e293b;font-size:0.9rem'> " + str(_reason) + "</span></div>"
                         )
                         st.markdown(_rdiv, unsafe_allow_html=True)
                 _rationale = _debate.get("recommendation_rationale", "")
