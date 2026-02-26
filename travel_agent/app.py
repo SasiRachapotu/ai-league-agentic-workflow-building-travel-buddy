@@ -133,6 +133,7 @@ def init_state():
         "stage": 0,
         "preferences": None,
         "plan_options": None,
+        "debate": None,
         "selected_option": None,
         "budget": None,
         "transport": None,
@@ -143,6 +144,7 @@ def init_state():
         "replan_history": [],
         "active_tab": "🏠 Plan Trip",
         "demo_mode": False,
+        "persona": "",
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -202,9 +204,9 @@ with st.sidebar:
 
     # Reset button
     if st.button("🔄 Start New Trip", use_container_width=True):
-        for key in ["stage", "preferences", "plan_options", "selected_option",
+        for key in ["stage", "preferences", "plan_options", "debate", "selected_option",
                     "budget", "transport", "hotel", "activities", "itinerary",
-                    "agent_logs", "replan_history"]:
+                    "agent_logs", "replan_history", "persona"]:
             st.session_state[key] = None if key not in [
                 "stage", "agent_logs", "replan_history"
             ] else (0 if key == "stage" else [])
@@ -227,6 +229,46 @@ if st.session_state.active_tab == "🏠 Plan Trip":
     # ── STAGE 0: Input ───────────────────────────────────────────────────────
     if st.session_state.stage == 0:
         st.markdown("### 🧳 Tell me about your trip")
+
+        # ── Persona Selector ─────────────────────────────────────────────────
+        st.markdown("**🎭 Select Your Traveler Profile** *(optional — shapes all agent decisions)*")
+        _PERSONAS = {
+            "🎒 Backpacker": "Backpacker",
+            "👨\u200d👩\u200d👧 Family": "Family",
+            "🏔️ Adrenaline Junkie": "Adrenaline Junkie",
+            "🧘 Spiritual Seeker": "Spiritual Seeker",
+        }
+        _PERSONA_HINTS = {
+            "Backpacker": "Budget hostels, street food, max experiences per ₹",
+            "Family": "Kid-friendly, safe, comfortable, easy activities",
+            "Adrenaline Junkie": "Rafting, trekking, paragliding, cliff jumping",
+            "Spiritual Seeker": "Ashrams, yoga, meditation, peace & quiet",
+        }
+        _p_cols = st.columns(4)
+        for _i, (_label, _val) in enumerate(_PERSONAS.items()):
+            with _p_cols[_i]:
+                _is_sel = st.session_state.persona == _val
+                _border = "2px solid #2563eb" if _is_sel else "1px solid #e2e8f0"
+                _bg = "#dbeafe" if _is_sel else "white"
+                _emoji = _label.split()[0]
+                _short = " ".join(_label.split()[1:])
+                st.markdown(f"""
+                <div style="background:{_bg};border:{_border};border-radius:12px;padding:10px;
+                            text-align:center;margin-bottom:4px;">
+                    <div style="font-size:1.5rem">{_emoji}</div>
+                    <div style="font-weight:600;font-size:0.85rem;color:#1e3a8a">{_short}</div>
+                    <div style="font-size:0.72rem;color:#64748b;margin-top:3px">{_PERSONA_HINTS[_val]}</div>
+                </div>
+                """, unsafe_allow_html=True)
+                _btn_lbl = "✓ Selected" if _is_sel else "Select"
+                if st.button(_btn_lbl, key=f"persona_{_val}", use_container_width=True):
+                    st.session_state.persona = "" if st.session_state.persona == _val else _val
+                    st.rerun()
+        if st.session_state.persona:
+            st.success(f"✅ Persona: **{st.session_state.persona}** — agents will tailor all recommendations to this profile.")
+        else:
+            st.caption("No persona selected — agents will use your stated preferences only.")
+        st.markdown("---")
 
         col1, col2 = st.columns([3, 1])
         with col1:
@@ -266,12 +308,27 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                     st.session_state.preferences = prefs
                     add_log("Intent Parser", "done", f"Parsed: {prefs.destination}, {prefs.duration_days} days, ₹{prefs.total_budget_inr:,.0f}")
 
-                    # Plan Options Agent
+                    # Attach persona to preferences
+                    if st.session_state.persona:
+                        prefs.persona = st.session_state.persona
+
+                    # Plan Options Agent (persona-aware)
                     add_log("Plan Options Agent", "running", f"Generating 3 plan options for {prefs.destination}...")
                     from agents import plan_options_agent
-                    options = plan_options_agent.run(prefs)
+                    options = plan_options_agent.run(prefs, persona=st.session_state.persona)
                     st.session_state.plan_options = options
                     add_log("Plan Options Agent", "done", f"Generated {len(options)} options (A/B/C)")
+
+                    # Debate Agent — trade-off analysis
+                    add_log("Debate Agent", "running", "Generating trade-off analysis across 5 axes...")
+                    try:
+                        from agents import debate_agent
+                        debate = debate_agent.run(prefs, options)
+                        st.session_state.debate = debate
+                        add_log("Debate Agent", "done", "Trade-off analysis complete")
+                    except Exception as _de:
+                        add_log("Debate Agent", "error", f"Skipped: {_de}")
+                        st.session_state.debate = None
 
                     st.session_state.stage = 1
                     st.rerun()
@@ -347,6 +404,69 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                         add_log("Budget Optimizer", "done", f"Budget allocated: ₹{budget.projected_total_inr:,.0f} / ₹{prefs.total_budget_inr:,.0f}")
                         st.session_state.stage = 2
                         st.rerun()
+
+        # ── Agent Debate Panel ───────────────────────────────────────────────
+        _debate = st.session_state.get("debate")
+        if _debate and _debate.get("scores"):
+            st.markdown("---")
+            with st.expander("🤖 Why these options? — Agent Trade-off Reasoning", expanded=False):
+                st.markdown(
+                    "Each plan was scored by the **Debate Agent** across 5 axes "
+                    "*(1 = lowest, 10 = best; for Risk: 10 = safest)*"
+                )
+                _axes = _debate.get("axes", ["Budget Efficiency", "Comfort", "Experience Richness", "Time Efficiency", "Risk"])
+                _scores = _debate.get("scores", {})
+                _winner_axis = _debate.get("winner_axis", {})
+                _AXIS_ICONS = {"Budget Efficiency": "💰", "Comfort": "🛁", "Experience Richness": "🌟",
+                               "Time Efficiency": "⏱️", "Risk": "🛡️"}
+                _OPT_COLORS = {"A": "#2563eb", "B": "#16a34a", "C": "#9333ea"}
+
+                # Build HTML score table using string concatenation (avoids escape issues)
+                _tbl = "<table style='width:100%;border-collapse:collapse;background:white;"
+                _tbl += "border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.05)'>"
+                _tbl += "<thead><tr><th style='text-align:left;padding:8px 12px;background:#1e3a8a;color:white;'>Axis</th>"
+                for _lbl in ["A", "B", "C"]:
+                    _tbl += "<th style='text-align:center;padding:8px 12px;background:#1e3a8a;color:" + _OPT_COLORS[_lbl] + "'>Option " + _lbl + "</th>"
+                _tbl += "</tr></thead><tbody>"
+
+                for _axis in _axes:
+                    _icon = _AXIS_ICONS.get(_axis, "📊")
+                    _winner = _winner_axis.get(_axis, "")
+                    _tbl += "<tr><td style='padding:8px 12px;font-weight:600'>" + _icon + " " + _axis + "</td>"
+                    for _lbl in ["A", "B", "C"]:
+                        _sc = _scores.get(_lbl, {}).get(_axis, 5)
+                        _bar_w = int(_sc * 10)
+                        _bold = "font-weight:700;" if _winner == _lbl else ""
+                        _trophy = " 🏆" if _winner == _lbl else ""
+                        _col = _OPT_COLORS[_lbl]
+                        _tbl += (
+                            "<td style='text-align:center;padding:6px 12px;" + _bold + "'>"
+                            + "<div style='font-size:1.1rem;color:" + _col + ";'>" + str(_sc) + "/10" + _trophy + "</div>"
+                            + "<div style='background:#e2e8f0;border-radius:4px;height:6px;width:80px;margin:2px auto;'>"
+                            + "<div style='background:" + _col + ";width:" + str(_bar_w) + "%;height:6px;border-radius:4px;'></div>"
+                            + "</div></td>"
+                        )
+                    _tbl += "</tr>"
+                _tbl += "</tbody></table>"
+                st.markdown(_tbl, unsafe_allow_html=True)
+
+                st.markdown("#### 💬 Agent Reasoning")
+                _reasoning = _debate.get("reasoning", {})
+                for _lbl in ["A", "B", "C"]:
+                    _reason = _reasoning.get(_lbl, "")
+                    if _reason:
+                        _col = _OPT_COLORS[_lbl]
+                        _rdiv = (
+                            "<div style='background:white;border-left:4px solid " + _col + ";"
+                            "padding:10px 14px;border-radius:6px;margin:6px 0;"
+                            "box-shadow:0 1px 4px rgba(0,0,0,0.06);'>"
+                            "<b style='color:" + _col + "'>Option " + _lbl + ":</b>"
+                            "<span style='color:#334155;font-size:0.9rem'> " + str(_reason) + "</span></div>"
+                        )
+                        st.markdown(_rdiv, unsafe_allow_html=True)
+                _rationale = _debate.get("recommendation_rationale", "")
+                if _rationale:
+                    st.info(f"⭐ **Overall Recommendation:** {_rationale}")
 
     # ── STAGE 2: Checkpoint 2 — Budget Approval ──────────────────────────────
     elif st.session_state.stage == 2:
@@ -471,12 +591,31 @@ if st.session_state.active_tab == "🏠 Plan Trip":
                         st.session_state.selected_option,
                         budget,
                         transport, hotel, activities,
+                        persona=st.session_state.get("persona", ""),
                     )
                     st.session_state.itinerary = itinerary
                     add_log("Itinerary Planner", "done", f"Complete! {len(itinerary.days)} days planned, ₹{itinerary.total_estimated_cost_inr:,.0f} total")
-                    st.session_state.stage = 4
-                    st.session_state.active_tab = "🗺️ Itinerary & Map"
-                    st.rerun()
+
+                with st.spinner("⚠️ Resilience Agent generating contingency plans..."):
+                    try:
+                        add_log("Resilience Agent", "running", "Identifying risks and fallback options...")
+                        from agents import resilience_agent
+                        from models.schemas import ContingencyPlan
+                        _raw_plans = resilience_agent.run(st.session_state.itinerary)
+                        _contingency = []
+                        for _p in _raw_plans:
+                            try:
+                                _contingency.append(ContingencyPlan(**_p))
+                            except Exception:
+                                pass
+                        st.session_state.itinerary.contingency_plans = _contingency or None
+                        add_log("Resilience Agent", "done", f"Generated {len(_contingency)} contingency plans")
+                    except Exception as _re:
+                        add_log("Resilience Agent", "error", f"Skipped: {_re}")
+
+                st.session_state.stage = 4
+                st.session_state.active_tab = "🗺️ Itinerary & Map"
+                st.rerun()
         with col2:
             if st.button("← Back to Budget", use_container_width=True):
                 st.session_state.stage = 2
@@ -599,6 +738,35 @@ elif st.session_state.active_tab == "🗺️ Itinerary & Map":
             st.markdown("### 📌 Booking Checklist")
             for item in itinerary.booking_checklist:
                 st.checkbox(item, key=f"check_{item[:20]}")
+
+        # ── Contingency Plans ────────────────────────────────────────────────
+        if itinerary.contingency_plans:
+            st.markdown("---")
+            st.markdown("### ⚠️ What Could Go Wrong? — Plan B")
+            st.caption("The Resilience Agent has pre-analysed your trip and prepared fallback options so you're never stranded.")
+            _LIKELIHOOD_COLORS = {"Low": "#22c55e", "Medium": "#f59e0b", "High": "#ef4444"}
+            for _cp in itinerary.contingency_plans:
+                _lcol = _LIKELIHOOD_COLORS.get(_cp.likelihood, "#64748b")
+                _impact_str = (
+                    f" | 💸 Extra cost if triggered: ₹{_cp.budget_impact_inr:,.0f}"
+                    if _cp.budget_impact_inr > 0 else ""
+                )
+                st.markdown(
+                    f"<div style=\'background:white;border-radius:12px;padding:16px 20px;"
+                    f"border-left:4px solid {_lcol};margin-bottom:10px;"
+                    f"box-shadow:0 2px 8px rgba(0,0,0,0.05);\'>"
+                    f"<div style=\'display:flex;align-items:center;gap:10px;margin-bottom:6px;\'>"
+                    f"<span style=\'font-weight:700;font-size:1rem;color:#0f172a;\'>⚠️ {_cp.risk}</span>"
+                    f"<span style=\'background:{_lcol};color:white;border-radius:20px;padding:1px 10px;"
+                    f"font-size:0.75rem;font-weight:600;\'>{_cp.likelihood} Risk</span></div>"
+                    f"<div style=\'color:#475569;font-size:0.88rem;margin-bottom:8px;\'>{_cp.description}</div>"
+                    f"<div style=\'color:#1e3a8a;font-size:0.87rem;\'>"
+                    f"<b>✅ Fallback:</b> {_cp.fallback_action}{_impact_str}</div>"
+                    f"<a href=\'{_cp.fallback_url}\' target=\'_blank\' "
+                    f"style=\'font-size:0.82rem;color:#2563eb;\'>🔗 Book Alternative</a>"
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
 
         # ── Dynamic Replanning ───────────────────────────────────────────────
         st.markdown("---")

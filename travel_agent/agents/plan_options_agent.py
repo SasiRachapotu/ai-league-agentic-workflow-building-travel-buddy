@@ -11,6 +11,14 @@ from tools.weather_tool import get_weather_summary
 from models.schemas import TravelerPreferences, PlanOption
 
 
+PERSONA_INSTRUCTIONS = {
+    "Backpacker": "This is a budget-conscious backpacker. Highlight cheap dormitory/hostel stays, street food, and free activities. Make Option B and C distinctly budget-focused.",
+    "Family": "This is a family trip with children. Make all options kid-friendly, safe, and comfortable. Highlight family packages, pool hotels, and easy activities.",
+    "Adrenaline Junkie": "This traveler wants maximum adrenaline. All options should be adventure-heavy. Prioritize activities like rafting, paragliding, trekking, bungee jumping.",
+    "Spiritual Seeker": "This traveler seeks spiritual depth. All options should focus on ashrams, yoga retreats, meditation, peaceful temples, and wellness. Avoid party/nightlife suggestions.",
+}
+
+
 PLAN_OPTIONS_PROMPT = """
 You are a travel planning expert. Generate exactly 3 distinct trip plan options for a traveler.
 
@@ -33,7 +41,9 @@ Web Research Context:
 Weather:
 {weather}
 
-Generate 3 plan options. Return JSON array with EXACTLY 3 objects:
+Generate 3 plan options. The traveler's persona is: {persona_instruction}
+
+Return JSON array with EXACTLY 3 objects:
 [
   {{
     "label": "A",
@@ -73,13 +83,15 @@ Rules:
 """
 
 
-def run(prefs: TravelerPreferences) -> list[PlanOption]:
+def run(prefs: TravelerPreferences, persona: str = "") -> list[PlanOption]:
     """Generate 3 plan options based on traveler preferences."""
     web_context = search_to_context(
         f"{prefs.destination} travel guide {' '.join(prefs.interests)} {prefs.duration_days} days",
         max_results=4,
     )
     weather = get_weather_summary(prefs.destination, prefs.travel_dates or "next weekend")
+
+    persona_instruction = PERSONA_INSTRUCTIONS.get(persona, "Plan options based on the traveler's stated interests and style.")
 
     prompt = PLAN_OPTIONS_PROMPT.format(
         destination=prefs.destination,
@@ -95,6 +107,7 @@ def run(prefs: TravelerPreferences) -> list[PlanOption]:
         food=prefs.food_preference,
         web_context=web_context,
         weather=weather,
+        persona_instruction=persona_instruction,
     )
 
     raw = generate(prompt, temperature=0.7)
