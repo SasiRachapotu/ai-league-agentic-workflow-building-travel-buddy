@@ -1,0 +1,288 @@
+{
+    "realm": "indian-financial",
+    "enabled": true,
+    "sslRequired": "none",
+    "registrationAllowed": true,
+    "loginWithEmailAllowed": true,
+    "duplicateEmailsAllowed": false,
+    "resetPasswordAllowed": true,
+    "editUsernameAllowed": false,
+    "bruteForceProtected": true,
+    "defaultSignatureAlgorithm": "RS256",
+    "roles": {
+        "realm": [
+            {
+                "name": "free_user",
+                "description": "Free tier — basic market data and news"
+            },
+            {
+                "name": "premium_user",
+                "description": "Premium tier — fundamentals, technicals, MF comparison"
+            },
+            {
+                "name": "analyst",
+                "description": "Analyst tier — full access including cross-source reasoning and filings"
+            }
+        ]
+    },
+    "scopeMappings": [
+        {
+            "clientScope": "market:read",
+            "roles": [
+                "free_user",
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "mf:read",
+            "roles": [
+                "free_user",
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "news:read",
+            "roles": [
+                "free_user",
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "watchlist:read",
+            "roles": [
+                "free_user",
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "watchlist:write",
+            "roles": [
+                "free_user",
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "fundamentals:read",
+            "roles": [
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "technicals:read",
+            "roles": [
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "macro:read",
+            "roles": [
+                "premium_user",
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "filings:read",
+            "roles": [
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "filings:deep",
+            "roles": [
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "macro:historical",
+            "roles": [
+                "analyst"
+            ]
+        },
+        {
+            "clientScope": "research:generate",
+            "roles": [
+                "analyst"
+            ]
+        }
+    ],
+    "clientScopes": [
+        {
+            "name": "market:read",
+            "protocol": "openid-connect",
+            "description": "Live quotes, price history, indices, movers"
+        },
+        {
+            "name": "fundamentals:read",
+            "protocol": "openid-connect",
+            "description": "Financial statements, ratios, shareholding"
+        },
+        {
+            "name": "technicals:read",
+            "protocol": "openid-connect",
+            "description": "Technical indicators, option chains"
+        },
+        {
+            "name": "mf:read",
+            "protocol": "openid-connect",
+            "description": "Mutual fund NAV, search, comparison"
+        },
+        {
+            "name": "news:read",
+            "protocol": "openid-connect",
+            "description": "News articles and sentiment"
+        },
+        {
+            "name": "filings:read",
+            "protocol": "openid-connect",
+            "description": "List filings"
+        },
+        {
+            "name": "filings:deep",
+            "protocol": "openid-connect",
+            "description": "Retrieve full filing documents"
+        },
+        {
+            "name": "macro:read",
+            "protocol": "openid-connect",
+            "description": "Current macro indicators"
+        },
+        {
+            "name": "macro:historical",
+            "protocol": "openid-connect",
+            "description": "Historical macro time series"
+        },
+        {
+            "name": "research:generate",
+            "protocol": "openid-connect",
+            "description": "Cross-source reasoning tools"
+        },
+        {
+            "name": "watchlist:read",
+            "protocol": "openid-connect",
+            "description": "Read personal watchlist"
+        },
+        {
+            "name": "watchlist:write",
+            "protocol": "openid-connect",
+            "description": "Modify personal watchlist"
+        }
+    ],
+    "clients": [
+        {
+            "clientId": "mcp-client",
+            "name": "MCP Financial Client",
+            "enabled": true,
+            "publicClient": true,
+            "standardFlowEnabled": true,
+            "directAccessGrantsEnabled": true,
+            "serviceAccountsEnabled": false,
+            "redirectUris": [
+                "http://localhost:3000/callback",
+                "http://localhost:*",
+                "https://claude.ai/*"
+            ],
+            "webOrigins": [
+                "*"
+            ],
+            "defaultClientScopes": [
+                "openid",
+                "profile",
+                "email"
+            ],
+            "optionalClientScopes": [
+                "market:read",
+                "fundamentals:read",
+                "technicals:read",
+                "mf:read",
+                "news:read",
+                "filings:read",
+                "filings:deep",
+                "macro:read",
+                "macro:historical",
+                "research:generate",
+                "watchlist:read",
+                "watchlist:write"
+            ],
+            "attributes": {
+                "pkce.code.challenge.method": "S256",
+                "oauth2.device.authorization.grant.enabled": "false",
+                "oidc.ciba.grant.enabled": "false"
+            },
+            "protocol": "openid-connect",
+            "fullScopeAllowed": false
+        },
+        {
+            "clientId": "mcp-server-resource",
+            "name": "MCP Server Resource",
+            "enabled": true,
+            "bearerOnly": true,
+            "publicClient": false,
+            "standardFlowEnabled": false,
+            "directAccessGrantsEnabled": false,
+            "serviceAccountsEnabled": false
+        }
+    ],
+    "users": [
+        {
+            "username": "free_user",
+            "email": "free@example.com",
+            "enabled": true,
+            "emailVerified": true,
+            "firstName": "Free",
+            "lastName": "User",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "free_user"
+            ]
+        },
+        {
+            "username": "premium_user",
+            "email": "premium@example.com",
+            "enabled": true,
+            "emailVerified": true,
+            "firstName": "Premium",
+            "lastName": "User",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "premium_user"
+            ]
+        },
+        {
+            "username": "analyst",
+            "email": "analyst@example.com",
+            "enabled": true,
+            "emailVerified": true,
+            "firstName": "Research",
+            "lastName": "Analyst",
+            "credentials": [
+                {
+                    "type": "password",
+                    "value": "password",
+                    "temporary": false
+                }
+            ],
+            "realmRoles": [
+                "analyst"
+            ]
+        }
+    ]
+}

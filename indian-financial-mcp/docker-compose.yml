@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # ============================================================
+  # Keycloak — OAuth 2.1 Authorization Server
+  # ============================================================
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: keycloak
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    command:
+      - start-dev
+      - --import-realm
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./keycloak/realm-config.json:/opt/keycloak/data/import/realm-config.json
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo >&3 && exec 3>&-"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  # ============================================================
+  # Redis — Caching & Rate Limiting
+  # ============================================================
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 128mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ============================================================
+  # MCP Server — Indian Financial Intelligence
+  # ============================================================
+  mcp-server:
+    build: .
+    container_name: mcp-server
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      REDIS_URL: redis://redis:6379
+      KEYCLOAK_URL: http://keycloak:8080
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
